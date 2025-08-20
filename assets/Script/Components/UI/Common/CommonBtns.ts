@@ -1,7 +1,7 @@
-import { _decorator, Button, Component, Label, Node, Sprite, Toggle, ToggleContainer } from 'cc';
+import { _decorator, Button, Component, Label, macro, Node, Sprite, Toggle, ToggleContainer } from 'cc';
 import { gameConfig, panelState, volumeState } from '../../../Configs/Config';
 import { GameConstants } from '../../../Configs/GameConstants';
-import { creatEventHandler, formatNumber, pickRandomNumbers } from '../../../Utils/Utils';
+import { creatEventHandler, formatNumber } from '../../../Utils/Utils';
 import { EventManager, evtFunc, evtNode } from '../../EventManager';
 import { CommonManager } from './CommonManager';
 const { ccclass, property } = _decorator;
@@ -26,6 +26,9 @@ export class CommonBtns extends Component {
     private doubleBtn: Button = null;
     private reBetBtn: Button = null;
     private undoBtn: Button = null;
+
+    private toggleArr: Toggle[] = [];
+    private currentIndex: number = 0;
 
     protected onLoad(): void {
         this.commonManager = this.node.getComponent(CommonManager);
@@ -90,6 +93,8 @@ export class CommonBtns extends Component {
         this.chipBtnNodes.forEach((c, i) => {
             c.getChildByName('Label').getComponent(Label).string = formatNumber(GameConstants.CHIP_VALUES[i]);
         });
+
+        this.toggleArr = [this.basicToggle, this.fourSumToggle, this.jackpotToggle];
 
         this.setSndSprite(gameConfig.volume);
 
@@ -171,9 +176,17 @@ export class CommonBtns extends Component {
         gameConfig.isAutoReBet = isChecked;
 
 
-        //!----- Temp
-        const ran = pickRandomNumbers();
-        emit(evtFunc.ballResults, ran);
+        //!----- for Test -----!//
+        /*
+        if (isChecked) {
+            const ran = pickRandomNumbers();
+            emit(evtFunc.ballResults, [1, 2, 3, 4]);
+        }
+        else {
+            emit(evtFunc.gameEnd);
+        }
+        */
+        //!--------------------!//
     }
 
     private clickDenom(event, customEventData) {
@@ -302,11 +315,36 @@ export class CommonBtns extends Component {
                 break;
         }
     }
+
+    public winStart() {
+        this.toggleArr.forEach(t => {
+            t.interactable = false;
+        });
+
+        this.currentIndex = 0;
+        this.toggleArr[this.currentIndex].isChecked = true;
+
+        this.schedule(this.switchNextToggle, GameConstants.PANEL_CYCLE_INTERVAL, macro.REPEAT_FOREVER);
+    }
+
+    private switchNextToggle() {
+        this.currentIndex = (this.currentIndex + 1) % this.toggleArr.length;
+        this.toggleArr[this.currentIndex].isChecked = true;
+    }
+
+    public winEnd() {
+        this.unschedule(this.switchNextToggle);
+
+        this.toggleArr.forEach(t => {
+            t.interactable = true;
+        });
+    }
 }
 
 function emit(...args: any[]) {
     EventManager.instance.node.emit(evtNode.commonBtns, args);
 }
+
 
 
 

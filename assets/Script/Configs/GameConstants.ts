@@ -10,7 +10,8 @@ export let GameConstants = {
     COUNTDOWN_TIME: 0,
     WS_RECONNECTION_TIME: 0,
     INITIAL_USER_CREDIT: 0,
-    CHIP_VALUES: []
+    CHIP_VALUES: [],
+    PANEL_CYCLE_INTERVAL: 0
 };
 
 export function initializeConstants(config: any) {

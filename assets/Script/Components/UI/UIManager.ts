@@ -16,22 +16,22 @@ const { ccclass, property } = _decorator;
 
 @ccclass('UIManager')
 export class UIManager extends Component {
-    public commonManager: CommonManager = null;
-    public commonBtn: CommonBtns = null;
+    private commonManager: CommonManager = null;
+    private commonBtn: CommonBtns = null;
 
-    public historyManager: HistoryManager = null;
+    private historyManager: HistoryManager = null;
 
-    public timer: Timer = null;
+    private timer: Timer = null;
 
-    public basicPanel: BasicPanel = null;
+    private basicPanel: BasicPanel = null;
     private basicPrizeCalculator: BasicPrizeCalculator = null;
 
-    public fourSumPanel: FourSumPanel = null;
+    private fourSumPanel: FourSumPanel = null;
     private fourSumPrizeCalculator: FourSumPrizeCalculator = null;
 
-    public jackpotPanel: JackpotPanel = null;
+    private jackpotPanel: JackpotPanel = null;
 
-    public streamingPopup: StreamingPopup = null;
+    private streamingPopup: StreamingPopup = null;
 
     private ballNums: any[] = [];
 
@@ -120,16 +120,24 @@ export class UIManager extends Component {
                 break;
 
             case evtFunc.ballResults:
+                // for Test
                 this.ballResults(args[1]);
                 this.numberConfirm();
+                break;
+
+            case evtFunc.gameEnd:
+                // for Test
+                this.gameEnd();
                 break;
 
             case evtFunc.clearBasic:
                 this.clearBasic();
                 break;
+
             case evtFunc.clearFourSum:
                 this.clearFourSum();
                 break;
+
             case evtFunc.clearJackpot:
                 this.clearJackpot();
                 break;
@@ -201,8 +209,6 @@ export class UIManager extends Component {
 
     // "confirm"
     public numberConfirm() {
-        this.commonBtn.setStreamingBtn(false);
-
         if (this.ballNums.length === 0) return;
 
         this.historyManager.addHistory(this.ballNums);
@@ -214,6 +220,7 @@ export class UIManager extends Component {
         this.basicPrizeCalculator.calculate(this.ballNums);
         this.fourSumPrizeCalculator.calculate();
 
+        this.commonBtn.winStart();
     }
 
     // "end"
@@ -222,6 +229,7 @@ export class UIManager extends Component {
         this.fourSumPanel.clearPanel();
         this.jackpotPanel.clearPanel();
 
+        this.commonBtn.winEnd();
         this.commonManager.gameEnd();
     }
 

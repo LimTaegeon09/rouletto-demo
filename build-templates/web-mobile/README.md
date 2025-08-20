@@ -1,3 +1,7 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/LimTaegeon09/rouletto-demo)
+
+# rouletto-demo
+
 =========================================
 게임 설정 파일 (settings.json) 설명서
 =========================================
@@ -36,6 +40,11 @@
   - 설명: 게임 시작 시 유저에게 기본으로 지급되는 크레딧 금액
   - 타입: 숫자 (Number)
   - 예시: 60000
+
+- PANEL_CYCLE_INTERVAL
+  - 설명: 게임 패널 순환 시간 (초 단위)
+  - 타입: 숫자 (Number)
+  - 예시: 3
 
 ---
 ### [게임별 베팅 설정]

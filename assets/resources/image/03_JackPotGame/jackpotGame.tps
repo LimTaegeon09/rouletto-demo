@@ -181,6 +181,8 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">../../../../../../Design/03_JackPotGame/BTN-Bet_off.png</key>
             <key type="filename">../../../../../../Design/03_JackPotGame/BTN-Bet_on.png</key>
+            <key type="filename">../../../../../../Design/03_JackPotGame/BTN-Cancel_off.png</key>
+            <key type="filename">../../../../../../Design/03_JackPotGame/BTN-Cancel_on.png</key>
             <key type="filename">../../../../../../Design/03_JackPotGame/BTN-Random_off.png</key>
             <key type="filename">../../../../../../Design/03_JackPotGame/BTN-Random_on.png</key>
             <struct type="IndividualSpriteSettings">
@@ -265,6 +267,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">../../../../../../Design/03_JackPotGame/win_jackpot.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>177,54,355,108</rect>
+                <key>scale9Paddings</key>
+                <rect>177,54,355,108</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
         </map>
         <key>fileLists</key>
         <map type="SpriteSheetMap">
@@ -274,6 +291,8 @@
                 <array>
                     <filename>../../../../../../Design/03_JackPotGame/BTN-Bet_off.png</filename>
                     <filename>../../../../../../Design/03_JackPotGame/BTN-Bet_on.png</filename>
+                    <filename>../../../../../../Design/03_JackPotGame/BTN-Cancel_off.png</filename>
+                    <filename>../../../../../../Design/03_JackPotGame/BTN-Cancel_on.png</filename>
                     <filename>../../../../../../Design/03_JackPotGame/BTN-Random_off.png</filename>
                     <filename>../../../../../../Design/03_JackPotGame/BTN-Random_on.png</filename>
                     <filename>../../../../../../Design/03_JackPotGame/bet_chip_jackpot.png</filename>
@@ -288,6 +307,7 @@
                     <filename>../../../../../../Design/03_JackPotGame/game04_boxon.png</filename>
                     <filename>../../../../../../Design/03_JackPotGame/game05_bg.png</filename>
                     <filename>../../../../../../Design/03_JackPotGame/game05_boxon.png</filename>
+                    <filename>../../../../../../Design/03_JackPotGame/win_jackpot.png</filename>
                 </array>
             </struct>
         </map>

@@ -29,6 +29,7 @@ export const evtFunc = {
     subJackpotBet: 'subJackpotBet',
     addPageRecord: 'addPageRecord',
     removePageRecord: 'removePageRecord',
+    gameEnd: 'gameEnd',
 }
 
 @ccclass('EventManager')

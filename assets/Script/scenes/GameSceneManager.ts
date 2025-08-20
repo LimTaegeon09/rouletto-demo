@@ -51,7 +51,7 @@ export class GameSceneManager extends Component {
     }
 
     private receiveCallback(data: any) {
-        return;
+        //return;
 
         Console.css("%cReceived data", 'color: #000000; background: #B8E7B8; font-weight: bold;', data);
 

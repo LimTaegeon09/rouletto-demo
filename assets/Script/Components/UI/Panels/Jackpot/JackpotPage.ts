@@ -8,7 +8,6 @@ const { ccclass, property } = _decorator;
 
 @ccclass('JackpotPage')
 export class JackpotPage extends Component {
-    //private jackpotPanel: JackpotPanel = null;
     private jackpotPrizeCalculator: JackpotPrizeCalculator = null;
 
     private numNodes: Array<Node> = [];
@@ -19,13 +18,13 @@ export class JackpotPage extends Component {
     private chipNode: Node = null;
     private winLabel: Label = null;
     private betLabel: Label = null;
+    private winNode: Node = null;
 
     private isBetting: boolean = false;
 
     public index: number = null;
 
     protected onLoad(): void {
-        //this.jackpotPanel = this.node.parent.getComponent(JackpotPanel);
         this.jackpotPrizeCalculator = this.node.parent.getComponent(JackpotPrizeCalculator);
 
         this.numNodes = this.node.getChildByName('Win').children;
@@ -35,6 +34,7 @@ export class JackpotPage extends Component {
         this.chipNode = this.node.getChildByName('ChipSpr');
         this.winLabel = this.node.getChildByName('WinLabel').getComponent(Label);
         this.betLabel = this.node.getChildByName('BetLabel').getComponent(Label);
+        this.winNode = this.node.getChildByName('WinSpr');
 
         ////////////////////////////////////////////////
 
@@ -95,7 +95,7 @@ export class JackpotPage extends Component {
 
         this.isBetting = true;
 
-        emit(evtNode.jackpotPanel, evtFunc.addPageRecord, this.index, this.numNodes);        
+        emit(evtNode.jackpotPanel, evtFunc.addPageRecord, this.index, this.numNodes);
     }
 
     private clickRandomBtn(event, customEventData) {
@@ -126,13 +126,17 @@ export class JackpotPage extends Component {
         //////////////////////////////
 
         this.isBetting = false;
-        
-        emit(evtNode.jackpotPanel, evtFunc.removePageRecord, this.index);   
+
+        emit(evtNode.jackpotPanel, evtFunc.removePageRecord, this.index);
     }
 
     public winStart(numbers: number[]) {
-
-        // win 연출 추가 ?
+        if (this.numbers.length === numbers.length) {
+            const set1 = new Set(numbers);
+            if (this.numbers.every(num => set1.has(num))) {
+                this.winNode.active = true;
+            }
+        }
 
         this.jackpotPrizeCalculator.calculate(numbers, this.numbers);
     }
@@ -149,6 +153,7 @@ export class JackpotPage extends Component {
             n.getComponent(Button).interactable = true;
         });
         this.betBtn.interactable = false;
+        this.winNode.active = false;
 
         this.numbers = [];
     }

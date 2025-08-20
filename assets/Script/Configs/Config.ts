@@ -50,7 +50,7 @@ export var gameConfig = {
     chip: 1,
     denom: 1,
     currentBet: 1,
-    isBettable: true, // false
+    isBettable: false, // false
     isAutoReBet: false,
     isJackpotWin: false
 };
