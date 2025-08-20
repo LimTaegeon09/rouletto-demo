@@ -1,0 +1,109 @@
+{
+  "ver": "1.0.8",
+  "importer": "sprite-atlas",
+  "imported": true,
+  "uuid": "f7c18cc4-4284-464f-a47e-c2b829863f37",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {
+    "ed57c": {
+      "importer": "sprite-frame",
+      "uuid": "f7c18cc4-4284-464f-a47e-c2b829863f37@ed57c",
+      "displayName": "",
+      "id": "ed57c",
+      "name": "area_sample",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 1,
+        "trimY": 1,
+        "width": 1392,
+        "height": 783,
+        "rawWidth": 1392,
+        "rawHeight": 783,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "0ee6ceed-dfe5-4ff1-a97f-0afb88d438b8@6c48a",
+        "atlasUuid": "f7c18cc4-4284-464f-a47e-c2b829863f37"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "a2d5d": {
+      "importer": "sprite-frame",
+      "uuid": "f7c18cc4-4284-464f-a47e-c2b829863f37@a2d5d",
+      "displayName": "",
+      "id": "a2d5d",
+      "name": "line_livecam_40",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 1395,
+        "trimY": 1,
+        "width": 143,
+        "height": 298,
+        "rawWidth": 143,
+        "rawHeight": 298,
+        "borderTop": 40,
+        "borderBottom": 40,
+        "borderLeft": 40,
+        "borderRight": 40,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [],
+          "indexes": [],
+          "uv": [],
+          "nuv": [],
+          "minPos": [],
+          "maxPos": []
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "0ee6ceed-dfe5-4ff1-a97f-0afb88d438b8@6c48a",
+        "atlasUuid": "f7c18cc4-4284-464f-a47e-c2b829863f37"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "atlasTextureName": "liveCam.png",
+    "format": 3,
+    "uuid": "f7c18cc4-4284-464f-a47e-c2b829863f37",
+    "textureUuid": "0ee6ceed-dfe5-4ff1-a97f-0afb88d438b8@6c48a"
+  }
+}
