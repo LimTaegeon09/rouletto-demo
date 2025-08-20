@@ -18,15 +18,16 @@ pipeline {
             steps {
                 echo '3. 빌드 결과물을 배포용 저장소에 푸시합니다...'
                 dir('build/web-mobile') {
-                    bat 'git init'
-                    bat 'git config user.name "Jenkins-Bot"'
-                    bat 'git config user.email "menuhi09@gmail.com"'
-                    bat 'git add .'
-                    bat 'git commit -m "Deploy new build #${env.BUILD_NUMBER}"'
-                    
+                    // ★★ git 명령어 앞에 전체 경로를 추가합니다. ★★
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" init'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.name "Jenkins-Bot"'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.email "jenkins@example.com"'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Deploy new build #${env.BUILD_NUMBER}"'
+
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                        bat 'git remote add origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LimTaegeon09/rouletto-demo-deploy.git'
-                        bat 'git push -f origin main'
+                        bat '"C:\\Program Files\\Git\\bin\\git.exe" remote add origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LimTaegeon09/rouletto-demo-deploy.git'
+                        bat '"C:\\Program Files\\Git\\bin\\git.exe" push -f origin main'
                     }
                 }
             }
