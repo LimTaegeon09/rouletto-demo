@@ -30,8 +30,11 @@ pipeline {
                         bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.email "jenkins@example.com"'
                         bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
                         bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Deploy new build #${env.BUILD_NUMBER}"'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" remote add origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LimTaegeon09/rouletto-demo-deploy.git'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" push -f origin master'
+                        
+                        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 작은 따옴표를 큰 따옴표로 변경 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+                        bat "C:\\Program Files\\Git\\bin\\git.exe remote add origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LimTaegeon09/rouletto-demo-deploy.git"
+                        bat "C:\\Program Files\\Git\\bin\\git.exe push -f origin master"
+                        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
                     }
                 }
             }
