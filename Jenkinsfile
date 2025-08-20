@@ -11,7 +11,7 @@ pipeline {
         stage('Cocos Creator Build') {
             steps {
                 echo '2. Cocos Creator 빌드를 시작합니다...'                        
-                bat '"C:\\ProgramData\\cocos\\editors\\Creator\\3.8.0\\CocosCreator.exe" --project . --build "platform=web-mobile;debug=false"'
+                bat '"C:\\ProgramData\\cocos\\editors\\Creator\\3.8.0\\CocosCreator.exe" --project . --build "platform=web-mobile;debug=false;mainBundleCompressionType=merge_dep"'
             }
         }
         stage('Deploy to Git') {
