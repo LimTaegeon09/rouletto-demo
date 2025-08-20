@@ -1,9 +1,8 @@
-import { _decorator, Button, Component, find, Label, Node } from 'cc';
-import { UIManager } from 'db://assets/Script/Components/UI/UIManager';
+import { _decorator, Button, Component, Label, Node } from 'cc';
 import { BettingInfo, COLOR_COMBINATIONS, COLUMN_NUMBERS, Console, DOZEN_NUMBERS, gameConfig, moneyConfig, SPECIAL_HIGH_NUMBERS, SPECIAL_LOW_NUMBERS } from 'db://assets/Script/Configs/Config';
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { creatEventHandler, formatNumber, getColorCombination, parseNumber } from 'db://assets/Script/Utils/Utils';
-import { BasicPrizeCalculator } from './BasicPrizeCalculator';
+import { EventManager, evtFunc, evtNode } from '../../../EventManager';
 const { ccclass, property } = _decorator;
 
 class WinNode {
@@ -26,9 +25,6 @@ class ChipNode {
 
 @ccclass('BasicPanel')
 export class BasicPanel extends Component {
-    private uiManager: UIManager = null;
-    private basicPrizeCalculator: BasicPrizeCalculator = null;
-
     private winNode: WinNode = new WinNode();
     public chipNode: ChipNode = new ChipNode();
     private allWinNodes: Node[] = [];
@@ -40,8 +36,7 @@ export class BasicPanel extends Component {
     private previousBettingRecord: BettingInfo[] = [];
 
     protected onLoad(): void {
-        this.uiManager = find('Canvas/UI').getComponent(UIManager);
-        this.basicPrizeCalculator = this.node.getComponent(BasicPrizeCalculator);
+
 
         const win = this.node.getChildByName('Win');
         const chip = this.node.getChildByName('Chip');
@@ -132,7 +127,7 @@ export class BasicPanel extends Component {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        this.uiManager.commonManager.addBasicBet(bet);
+        emit(evtFunc.addBasicBet, bet);
 
         this.currentBettingRecord.push({
             chipNode: node,
@@ -191,8 +186,6 @@ export class BasicPanel extends Component {
         else if ((isConsecutive1 && isConsecutive2) || (isConsecutive2 && isConsecutive3)) {
             this.winNode.special[2].active = true;
         }
-
-        this.basicPrizeCalculator.calculate(numbers);
     }
 
     public clearPanel() {
@@ -250,7 +243,7 @@ export class BasicPanel extends Component {
             label.string = formatNumber(change);
         }
 
-        this.uiManager.commonManager.subBasicBet(bet);
+        emit(evtFunc.subBasicBet, bet);
     }
 
     public doubleBetting() {
@@ -273,7 +266,7 @@ export class BasicPanel extends Component {
 
             label.string = formatNumber(previousBet + increaseBet);
 
-            this.uiManager.commonManager.addBasicBet(increaseBet);
+            emit(evtFunc.addBasicBet, increaseBet);
 
             doubleBettingInfoArr.push({
                 chipNode: node,
@@ -322,7 +315,7 @@ export class BasicPanel extends Component {
             const label = node.getChildByName('Label').getComponent(Label);
             label.string = formatNumber(bet);
 
-            this.uiManager.commonManager.addBasicBet(bet);
+            emit(evtFunc.addBasicBet, bet);
 
             reBettingInfoArr.push({
                 chipNode: node,
@@ -336,10 +329,10 @@ export class BasicPanel extends Component {
             betInfoArr: reBettingInfoArr
         });
     }
+}
 
-
-
-
+function emit(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.commonManager, args);
 }
 
 

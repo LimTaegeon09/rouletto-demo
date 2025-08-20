@@ -1,4 +1,4 @@
-import { EventTarget, Node } from 'cc';
+import { Node } from 'cc';
 import { PayoutTable } from './PayoutTable';
 
 export const RED_NUMBERS = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]);
@@ -22,8 +22,6 @@ export const SPECIAL_HIGH_NUMBERS = new Set([19, 20, 21, 22, 23, 24, 25, 26, 27,
 export const COLOR_COMBINATIONS = Object.keys(PayoutTable.Basic.color);
 
 //!-------------------------------------------------------------
-
-export const eventTarget = new EventTarget();
 
 export interface BettingInfo {
     chipNode?: Node;

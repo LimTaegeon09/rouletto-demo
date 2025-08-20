@@ -1,16 +1,12 @@
-import { _decorator, Button, Component, find, Label, Node } from 'cc';
+import { _decorator, Button, Component, Label, Node } from 'cc';
 import { BettingInfo, Console, gameConfig, moneyConfig } from 'db://assets/Script/Configs/Config';
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { creatEventHandler, formatNumber, parseNumber } from 'db://assets/Script/Utils/Utils';
-import { UIManager } from 'db://assets/Script/Components/UI/UIManager';
-import { FourSumPrizeCalculator } from './FourSumPrizeCalculator';
+import { EventManager, evtFunc, evtNode } from '../../../EventManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('FourSumPanel')
 export class FourSumPanel extends Component {
-    private uiManager: UIManager = null;
-    private fourSumPrizeCalculator: FourSumPrizeCalculator = null;
-
     public winNodes: Node[] = [];
     public chipNodes: Node[] = [];
 
@@ -20,9 +16,6 @@ export class FourSumPanel extends Component {
     private previousBettingRecord: BettingInfo[] = [];
 
     protected onLoad(): void {
-        this.uiManager = find('Canvas/UI').getComponent(UIManager);
-        this.fourSumPrizeCalculator = this.node.getComponent(FourSumPrizeCalculator);
-
         const win = this.node.getChildByName('Win');
         const chip = this.node.getChildByName('Chip');
 
@@ -95,7 +88,7 @@ export class FourSumPanel extends Component {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        this.uiManager.commonManager.addFourSumBet(bet);
+        emit(evtFunc.addFourSumBet, bet);
 
         this.currentBettingRecord.push({
             chipNode: node,
@@ -127,8 +120,6 @@ export class FourSumPanel extends Component {
         if (sum % 2 === 0 && !hasZero) this.winNodes[12].active = true;
         if (hasZero) this.winNodes[13].active = true;
         if (sum % 2 !== 0 && !hasZero) this.winNodes[14].active = true;
-
-        this.fourSumPrizeCalculator.calculate();
     }
 
     public clearPanel() {
@@ -186,7 +177,7 @@ export class FourSumPanel extends Component {
             label.string = formatNumber(change);
         }
 
-        this.uiManager.commonManager.subFourSumBet(bet);
+        emit(evtFunc.subFourSumBet, bet);
     }
 
     public doubleBetting() {
@@ -209,7 +200,7 @@ export class FourSumPanel extends Component {
 
             label.string = formatNumber(previousBet + increaseBet);
 
-            this.uiManager.commonManager.addFourSumBet(increaseBet);
+            emit(evtFunc.addFourSumBet, increaseBet);
 
             doubleBettingInfoArr.push({
                 chipNode: node,
@@ -258,7 +249,7 @@ export class FourSumPanel extends Component {
             const label = node.getChildByName('Label').getComponent(Label);
             label.string = formatNumber(bet);
 
-            this.uiManager.commonManager.addFourSumBet(bet);
+            emit(evtFunc.addFourSumBet, bet);
 
             reBettingInfoArr.push({
                 chipNode: node,
@@ -272,6 +263,10 @@ export class FourSumPanel extends Component {
             betInfoArr: reBettingInfoArr
         });
     }
+}
+
+function emit(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.commonManager, args);
 }
 
 

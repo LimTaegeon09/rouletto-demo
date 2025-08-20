@@ -1,5 +1,6 @@
 import { Component, js, Label, Node, UITransform } from 'cc';
 import { BLACK_NUMBERS, COLOR_COMBINATIONS, Console, RED_NUMBERS } from '../Configs/Config';
+import { EventManager } from '../Components/EventManager';
 
 export function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

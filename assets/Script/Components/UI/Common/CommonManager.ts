@@ -1,28 +1,23 @@
-import { _decorator, Component, find, Label, Sprite } from 'cc';
+import { _decorator, Component, Label, Sprite } from 'cc';
 import { moneyConfig } from '../../../Configs/Config';
 import { GameConstants } from '../../../Configs/GameConstants';
 import { formatCurrency, formatNumber } from '../../../Utils/Utils';
-import { UIManager } from '../UIManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CommonManager')
 export class CommonManager extends Component {
-    private uiManager: UIManager = null;
-
     private bgSpr: Sprite = null;
 
     private basicBetLabel: Label = null;
     private fourSumBetLabel: Label = null;
     private jackpotBetLabel: Label = null;
-    private jackpotWinLabel: Label = null;
+    public jackpotWinLabel: Label = null;
 
     private creditLabel: Label = null;
     private winLabel: Label = null;
     private betLabel: Label = null;
 
     protected onLoad(): void {
-        this.uiManager = find('Canvas/UI').getComponent(UIManager);
-
         this.bgSpr = this.node.getChildByName('BgSpr').getComponent(Sprite);
 
         const top = this.node.getChildByName('Top');
@@ -128,8 +123,8 @@ export class CommonManager extends Component {
         this.subCredit(GameConstants.MIN_BET_JACKPOT);
     }
 
-    public addJackpotWin() {
-        moneyConfig.jackpotWin += this.uiManager.jackpotPanel.getIsBetting();
+    public addJackpotWin(bet: number) {
+        moneyConfig.jackpotWin += bet;
         this.jackpotWinLabel.string = 'USD\n' + formatCurrency(moneyConfig.jackpotWin, 1);
     }
 
@@ -214,11 +209,8 @@ export class CommonManager extends Component {
 
         this.initJackpotBet();
     }
-
-
-
-
 }
+
 
 
 

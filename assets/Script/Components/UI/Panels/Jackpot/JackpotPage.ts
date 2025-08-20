@@ -1,16 +1,14 @@
-import { _decorator, Button, Component, find, Label, Node, Sprite } from 'cc';
-import { UIManager } from 'db://assets/Script/Components/UI/UIManager';
+import { _decorator, Button, Component, Label, Node, Sprite } from 'cc';
 import { Console, gameConfig, moneyConfig } from 'db://assets/Script/Configs/Config';
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { creatEventHandler, formatNumber, pickRandomNumbers } from 'db://assets/Script/Utils/Utils';
-import { JackpotPanel } from './JackpotPanel';
+import { EventManager, evtFunc, evtNode } from '../../../EventManager';
 import { JackpotPrizeCalculator } from './JackpotPrizeCalculator';
 const { ccclass, property } = _decorator;
 
 @ccclass('JackpotPage')
 export class JackpotPage extends Component {
-    private uiManager: UIManager = null;
-    private jackpotPanel: JackpotPanel = null;
+    //private jackpotPanel: JackpotPanel = null;
     private jackpotPrizeCalculator: JackpotPrizeCalculator = null;
 
     private numNodes: Array<Node> = [];
@@ -27,8 +25,7 @@ export class JackpotPage extends Component {
     public index: number = null;
 
     protected onLoad(): void {
-        this.uiManager = find('Canvas/UI').getComponent(UIManager);
-        this.jackpotPanel = this.node.parent.getComponent(JackpotPanel);
+        //this.jackpotPanel = this.node.parent.getComponent(JackpotPanel);
         this.jackpotPrizeCalculator = this.node.parent.getComponent(JackpotPrizeCalculator);
 
         this.numNodes = this.node.getChildByName('Win').children;
@@ -85,7 +82,7 @@ export class JackpotPage extends Component {
         }
 
         this.chipNode.active = true;
-        this.uiManager.commonManager.addJackpotBet();
+        emit(evtNode.commonManager, evtFunc.addJackpotBet);
 
         this.numNodes.forEach(n => {
             n.getComponent(Button).interactable = false;
@@ -98,7 +95,7 @@ export class JackpotPage extends Component {
 
         this.isBetting = true;
 
-        this.jackpotPanel.addPageRecord(this.index, this.numbers);
+        emit(evtNode.jackpotPanel, evtFunc.addPageRecord, this.index, this.numNodes);        
     }
 
     private clickRandomBtn(event, customEventData) {
@@ -113,7 +110,7 @@ export class JackpotPage extends Component {
                 n.getComponent(Button).interactable = true;
             });
 
-            this.uiManager.commonManager.subJackpotBet();
+            emit(evtNode.commonManager, evtFunc.subJackpotBet);
             this.chipNode.active = false;
         }
 
@@ -129,8 +126,8 @@ export class JackpotPage extends Component {
         //////////////////////////////
 
         this.isBetting = false;
-
-        this.jackpotPanel.removePageRecord(this.index);
+        
+        emit(evtNode.jackpotPanel, evtFunc.removePageRecord, this.index);   
     }
 
     public winStart(numbers: number[]) {
@@ -169,7 +166,10 @@ export class JackpotPage extends Component {
 
         this.clickBetBtn();
     }
+}
 
+function emit(target: string, ...args: any[]) {
+    EventManager.instance.node.emit(target, args);
 }
 
 

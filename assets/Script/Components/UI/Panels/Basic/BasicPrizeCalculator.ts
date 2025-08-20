@@ -1,8 +1,9 @@
-import { _decorator, Component, find, Label } from 'cc';
+import { _decorator, Component, Label } from 'cc';
 import { COLOR_COMBINATIONS, COLUMN_NUMBERS, Console, DOZEN_NUMBERS, SPECIAL_HIGH_NUMBERS, SPECIAL_LOW_NUMBERS } from 'db://assets/Script/Configs/Config';
 import { PayoutTable } from 'db://assets/Script/Configs/PayoutTable';
 import { getColorCombination, parseNumber } from 'db://assets/Script/Utils/Utils';
-import { UIManager } from '../../UIManager';
+import { EventManager, evtFunc, evtNode } from '../../../EventManager';
+import { BasicPanel } from './BasicPanel';
 const { ccclass, property } = _decorator;
 
 enum BetType {
@@ -27,10 +28,10 @@ interface Bet {
 
 @ccclass('BasicPrizeCalculator')
 export class BasicPrizeCalculator extends Component {
-    private uiManager: UIManager = null;
+    private basicPanel: BasicPanel = null;
 
     protected onLoad(): void {
-        this.uiManager = find('Canvas/UI').getComponent(UIManager);
+        this.basicPanel = this.node.getComponent(BasicPanel);
     }
 
     public calculate(numbers: number[]) {
@@ -38,12 +39,13 @@ export class BasicPrizeCalculator extends Component {
         const winMoney = this.calculateWinnings(myBets, numbers);
 
         Console.css("%cBasic Prize", "color: #000000; background: #CC9999; font-weight: bold;", winMoney);
-        this.uiManager.commonManager.addWin(winMoney);
+
+        emit(evtFunc.addWin, winMoney);
     }
 
     private checkMyBets() {
         const myBets: Bet[] = [];
-        const chipNode = this.uiManager.basicPanel.chipNode;
+        const chipNode = this.basicPanel.chipNode;
 
         chipNode.straightUp.forEach((c, i) => {
             if (c.getChildByName('Sprite').active) {
@@ -204,8 +206,10 @@ export class BasicPrizeCalculator extends Component {
 
         return totalWinnings;
     }
+}
 
-
+function emit(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.commonManager, args);
 }
 
 

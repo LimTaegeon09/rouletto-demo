@@ -1,23 +1,14 @@
-import { _decorator, Component, find } from 'cc';
+import { _decorator, Component } from 'cc';
 import { Console, gameConfig, moneyConfig } from 'db://assets/Script/Configs/Config';
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { PayoutTable } from 'db://assets/Script/Configs/PayoutTable';
-import { UIManager } from '../../UIManager';
+import { EventManager, evtFunc, evtNode } from '../../../EventManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('JackpotPrizeCalculator')
 export class JackpotPrizeCalculator extends Component {
-    private uiManager: UIManager = null;
     private betNumbersArr: number[][] = [];
-    private pageCnt: number = 0;
-
-    protected onLoad(): void {
-        this.uiManager = find('Canvas/UI').getComponent(UIManager);
-    }
-
-    start() {
-        this.pageCnt = this.uiManager.jackpotPanel.jackpotPages.length;
-    }
+    private readonly pageCnt: number = 5;
 
     public calculate(winningNumbers: number[], betNumbers: number[]) {
         const sortedBetNumbers = [...betNumbers].sort((a, b) => a - b);
@@ -28,7 +19,8 @@ export class JackpotPrizeCalculator extends Component {
             const winMoney = this.calculateWinnings(sortedWinningNumbers, this.betNumbersArr);
 
             Console.css("%cJackpot Prize", "color: #000000; background: #CC9999; font-weight: bold;", winMoney);
-            this.uiManager.commonManager.addWin(winMoney);
+
+            emit(evtFunc.addWin, winMoney);
 
             this.betNumbersArr = [];
         }
@@ -71,4 +63,7 @@ export class JackpotPrizeCalculator extends Component {
     }
 }
 
+function emit(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.commonManager, args);
+}
 

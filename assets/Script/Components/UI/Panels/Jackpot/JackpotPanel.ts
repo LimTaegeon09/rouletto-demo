@@ -1,6 +1,6 @@
-import { _decorator, Component, find } from 'cc';
+import { _decorator, Component } from 'cc';
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
-import { UIManager } from 'db://assets/Script/Components/UI/UIManager';
+import { EventManager, evtFunc, evtNode } from '../../../EventManager';
 import { JackpotPage } from './JackpotPage';
 const { ccclass, property } = _decorator;
 
@@ -11,23 +11,33 @@ interface PageInfo {
 
 @ccclass('JackpotPanel')
 export class JackpotPanel extends Component {
-    private uiManager: UIManager = null;
-
     public jackpotPages: JackpotPage[] = [];
 
     private currentPageRecord: PageInfo[] = [];
     private previousPageRecord: PageInfo[] = [];
 
     protected onLoad(): void {
-        this.uiManager = find('Canvas/UI').getComponent(UIManager);
-
         for (let i = 0; i < 5; i++) {
             const page = this.node.getChildByName('PageSpr' + i);
             page.addComponent(JackpotPage);
             page.getComponent(JackpotPage).index = i;
             this.jackpotPages.push(page.getComponent(JackpotPage));
         }
-    }    
+
+        EventManager.instance.node.on(evtNode.jackpotPanel, this.evtJackpotPanel, this);
+    }
+
+    private evtJackpotPanel(args: any[]) {
+        switch (args[0]) {
+            case evtFunc.addPageRecord:
+                this.addPageRecord(args[1], args[2]);
+                break;
+
+            case evtFunc.removePageRecord:
+                this.removePageRecord(args[1]);
+                break;
+        }
+    }
 
     public setPanelActive(active: boolean) {
         this.node.setPosition(0, 0);
@@ -56,7 +66,8 @@ export class JackpotPanel extends Component {
         if (this.currentPageRecord.length === 0) return;
 
         this.jackpotPages[this.currentPageRecord.pop().pageIndex].clearPage();
-        this.uiManager.commonManager.subJackpotBet();
+
+        emit(evtFunc.subJackpotBet);
     }
 
     public addPageRecord(index: number, numbers: number[]) {
@@ -86,5 +97,8 @@ export class JackpotPanel extends Component {
     }
 }
 
+function emit(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.commonManager, args);
+}
 
 
