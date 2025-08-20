@@ -33,7 +33,7 @@ pipeline {
 
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         bat '"C:\\Program Files\\Git\\bin\\git.exe" remote add origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LimTaegeon09/rouletto-demo-deploy.git'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" push -f origin main'
+                        bat '"C:\\Program Files\\Git\\bin\\git.exe" push -f origin master'
                     }
                 }
             }
