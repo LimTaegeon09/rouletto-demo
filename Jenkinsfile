@@ -23,19 +23,17 @@ pipeline {
             steps {
                 echo '3. 빌드 결과물을 배포용 저장소에 푸시합니다...'
                 dir('build/web-mobile') {
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" init'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" checkout -b master'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.name "Jenkins-Bot"'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.email "jenkins@example.com"'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Deploy new build #${env.BUILD_NUMBER}"'
-                        
-                        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 작은 따옴표를 큰 따옴표로 변경 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-                        bat "C:\\Program Files\\Git\\bin\\git.exe remote add origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LimTaegeon09/rouletto-demo-deploy.git"
-                        bat "C:\\Program Files\\Git\\bin\\git.exe push -f origin master"
-                        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-                    }
+                    // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ withCredentials 블록을 완전히 제거합니다 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" init'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" checkout -b master'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.name "Jenkins-Bot"'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.email "jenkins@example.com"'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Deploy new build #${env.BUILD_NUMBER}"'
+                    // 인증 정보가 포함되지 않은 일반 주소를 사용합니다.
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" remote add origin https://github.com/LimTaegeon09/rouletto-demo-deploy.git'
+                    bat '"C:\\Program Files\\Git\\bin\\git.exe" push -f origin master'
+                    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
                 }
             }
         }
