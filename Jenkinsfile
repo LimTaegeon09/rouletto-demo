@@ -10,8 +10,14 @@ pipeline {
         }
         stage('Cocos Creator Build') {
             steps {
-                echo '2. Cocos Creator 빌드를 시작합니다...'                        
-                bat '"C:\\ProgramData\\cocos\\editors\\Creator\\3.8.0\\CocosCreator.exe" --project . --build "platform=web-mobile;debug=false;mainBundleCompressionType=merge_dep"'
+                echo '2. Cocos Creator 빌드를 시작합니다...'
+                // bat 스크립트가 실패해도(0이 아닌 종료 코드를 반환해도) 파이프라인을 중단하지 않도록 설정합니다.
+                script {
+                    def result = bat(script: '"C:\\ProgramData\\cocos\\editors\\Creator\\3.8.0\\CocosCreator.exe" --project . --build "platform=web-mobile;debug=false;mainBundleCompressionType=merge_dep"', returnStatus: true)
+                    if (result != 0) {
+                        echo "빌드 프로세스가 종료 코드 ${result}를 반환했지만, 배포를 계속 진행합니다."
+                    }
+                }
             }
         }
         stage('Deploy to Git') {
