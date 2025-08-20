@@ -20,24 +20,37 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Git') {
-            steps {
-                echo '3. 빌드 결과물을 배포용 저장소에 푸시합니다...'
-                dir('build/web-mobile') {
-                    // ★★ git 명령어 앞에 전체 경로를 추가합니다. ★★
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" init'
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.name "Jenkins-Bot"'
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.email "jenkins@example.com"'
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
-                    bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Deploy new build #${env.BUILD_NUMBER}"'
+stage('Deploy to Git') {
+    steps {
+        echo '3. 빌드 결과물을 배포용 저장소에 푸시합니다...'
+        dir('build/web-mobile') {
+            withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" init'
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" checkout -b master' // 배포 브랜치 이름
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.name "Jenkins-Bot"'
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" config user.email "jenkins@example.com"'
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" add .'
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" commit -m "Deploy new build #${env.BUILD_NUMBER}"'
+                
+                // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 이 부분을 수정합니다 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+                // 인증 정보를 URL에서 제거합니다.
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" remote add origin https://github.com/LimTaegeon09/rouletto-demo-deploy.git'
+                
+                // Git Credential Helper가 올바른 인증 정보를 사용하도록 설정합니다.
+                bat '''
+                    git config --global credential.helper manager
+                    echo password=%GIT_TOKEN% | git credential-manager-core store
+                    echo host=github.com >> .git/config
+                    echo protocol=https >> .git/config
+                    echo username=%GIT_USER% >> .git/config
+                '''
 
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" remote add origin https://${GIT_USER}:${GIT_TOKEN}@github.com/LimTaegeon09/rouletto-demo-deploy.git'
-                        bat '"C:\\Program Files\\Git\\bin\\git.exe" push -f origin master'
-                    }
-                }
+                bat '"C:\\Program Files\\Git\\bin\\git.exe" push -f origin master'
+                // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
             }
         }
+    }
+}
     }
     post {
         always {
