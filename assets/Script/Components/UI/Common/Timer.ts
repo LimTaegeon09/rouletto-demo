@@ -1,5 +1,6 @@
 import { _decorator, Component, Label, Node, Sprite, Tween, tween } from 'cc';
 import { gameConfig } from '../../../Configs/Config';
+import { EventManager, evtFunc, evtNode } from '../../EventManager';
 const { ccclass, property } = _decorator;
 
 const callsStrig = {
@@ -22,39 +23,27 @@ export class Timer extends Component {
     }
 
     protected start(): void {
-        if (!gameConfig.isBettable) this.setNoMoreBet();
+        this.setNoMoreBet();
     }
 
     public setNoMoreBet() {
-        gameConfig.isBettable = false;
-
         if (this.barTween) this.barTween.stop();
         this.callsLabel.string = callsStrig.noMore;
         this.barBgSprNode.active = false;
         this.barSpr.fillRange = 0;
-
-        //Console.css("%c" + callsStrig.noMore, "color: #000000; background: #CC9999; font-weight: bold;");
     }
 
     public setPlaceYourBet(time: number) {
-        gameConfig.isBettable = true;
-
         this.callsLabel.string = callsStrig.place;
         this.barBgSprNode.active = true;
         this.startCountdown(time);
-
-        //Console.css("%c" + callsStrig.place, "color: #000000; background: #CC9999; font-weight: bold;");
     }
 
     private setResult() {
-        gameConfig.isBettable = false;
-
         if (this.barTween) this.barTween.stop();
         this.callsLabel.string = callsStrig.result;
         this.barBgSprNode.active = false;
         this.barSpr.fillRange = 0;
-
-        //Console.css("%c" + callsStrig.result, "color: #000000; background: #CC9999; font-weight: bold;");
     }
 
     private startCountdown(time: number): void {
@@ -63,10 +52,14 @@ export class Timer extends Component {
         this.barTween = tween(this.barSpr)
             .to(time, { fillRange: 0 })
             .call(() => {
-                this.setNoMoreBet();
+                emit(evtFunc.bettingEnd);
             })
             .start();
     }
+}
+
+function emit(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.uiManager, args);
 }
 
 

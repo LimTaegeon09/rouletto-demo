@@ -179,6 +179,36 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">../../../../../../Design/00_Common/ETG_BetMs_NotEnought.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>78,13,156,27</rect>
+                <key>scale9Paddings</key>
+                <rect>78,13,156,27</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../../../../Design/00_Common/ETG_Chip_BetMax.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>29,12,57,25</rect>
+                <key>scale9Paddings</key>
+                <rect>29,12,57,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">../../../../../../Design/00_Common/Logo_rouletto.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -304,7 +334,9 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../Design/00_Common/btn_ClearAll.png</key>
+            <key type="filename">../../../../../../Design/00_Common/btn_ClearAll_dis.png</key>
+            <key type="filename">../../../../../../Design/00_Common/btn_ClearAll_off.png</key>
+            <key type="filename">../../../../../../Design/00_Common/btn_ClearAll_on.png</key>
             <key type="filename">../../../../../../Design/00_Common/btn_DoubleBet_off.png</key>
             <key type="filename">../../../../../../Design/00_Common/btn_DoubleBet_on.png</key>
             <key type="filename">../../../../../../Design/00_Common/btn_ReBet_off.png</key>
@@ -436,6 +468,8 @@
             <struct type="SpriteSheet">
                 <key>files</key>
                 <array>
+                    <filename>../../../../../../Design/00_Common/ETG_BetMs_NotEnought.png</filename>
+                    <filename>../../../../../../Design/00_Common/ETG_Chip_BetMax.png</filename>
                     <filename>../../../../../../Design/00_Common/Logo_rouletto.png</filename>
                     <filename>../../../../../../Design/00_Common/bg_down.png</filename>
                     <filename>../../../../../../Design/00_Common/bg_top.png</filename>
@@ -449,7 +483,9 @@
                     <filename>../../../../../../Design/00_Common/btn-JackpotGame_on.png</filename>
                     <filename>../../../../../../Design/00_Common/btn_Auto_rebet_off.png</filename>
                     <filename>../../../../../../Design/00_Common/btn_Auto_rebet_on.png</filename>
-                    <filename>../../../../../../Design/00_Common/btn_ClearAll.png</filename>
+                    <filename>../../../../../../Design/00_Common/btn_ClearAll_dis.png</filename>
+                    <filename>../../../../../../Design/00_Common/btn_ClearAll_off.png</filename>
+                    <filename>../../../../../../Design/00_Common/btn_ClearAll_on.png</filename>
                     <filename>../../../../../../Design/00_Common/btn_DoubleBet_off.png</filename>
                     <filename>../../../../../../Design/00_Common/btn_DoubleBet_on.png</filename>
                     <filename>../../../../../../Design/00_Common/btn_ReBet_off.png</filename>

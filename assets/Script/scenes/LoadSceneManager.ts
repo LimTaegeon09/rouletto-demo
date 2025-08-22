@@ -14,7 +14,7 @@ export class LoadSceneManager extends Component {
 
     private isLoaded: boolean = false;
 
-    private readonly imageCnt: number = 7;
+    private readonly imageCnt: number = 9;
     private readonly fontCnt: number = 11;
 
     private readonly sceneCnt: number = 1;
@@ -43,10 +43,10 @@ export class LoadSceneManager extends Component {
     }
 
     private async initialize() {
-        if(PREVIEW) await ConfigManager.initAtPreview();
+        if (PREVIEW) await ConfigManager.initAtPreview();
         else await ConfigManager.initAtBuild();
 
-        Console.css("%cRouletto Demo Client v" + packageJson.version, 'color: #ffffff; background: #ff1493; font-weight: bold;');
+        //Console.css("%cRouletto Demo Client v" + packageJson.version, 'color: #ffffff; background: #ff1493; font-weight: bold;');
 
         moneyConfig.credit = GameConstants.INITIAL_USER_CREDIT;
 
@@ -132,6 +132,22 @@ export class LoadSceneManager extends Component {
         *****************************************************************/
         resources.load('image/04_Livecam/liveCam', SpriteAtlas, (err, atlas) => {
             Assets.instance.liveCamAtlas = atlas;
+            this.loadedCnt++;
+        });
+
+        /*****************************************************************
+05_Help
+*****************************************************************/
+        resources.load('image/05_Help/help', SpriteAtlas, (err, atlas) => {
+            Assets.instance.helpAtlas = atlas;
+            this.loadedCnt++;
+        });
+
+        /*****************************************************************
+06_Effect
+*****************************************************************/
+        resources.load('image/06_Effect/effect', SpriteAtlas, (err, atlas) => {
+            Assets.instance.effectAtlas = atlas;
             this.loadedCnt++;
         });
 

@@ -14,8 +14,9 @@ export class CommonBtns extends Component {
     private fourSumToggle: Toggle = null;
     private jackpotToggle: Toggle = null;
 
-    private liveToggle: Toggle = null;
+    public liveToggle: Toggle = null;
     private sndBtnNode: Node = null;
+    private exitBtn: Button = null;
 
     private autoToggleNode: Node = null;
     private denomToggles: Array<Toggle> = [];
@@ -50,6 +51,7 @@ export class CommonBtns extends Component {
 
         this.liveToggle = rightBtns.getChildByName('LiveToggle').getComponent(Toggle);
         this.sndBtnNode = rightBtns.getChildByName('SoundBtn');
+        this.exitBtn = rightBtns.getChildByName('ExitBtn').getComponent(Button);
 
         this.autoToggleNode = bottom.getChildByName('AutoReBet').getChildByName('Toggle');
         denomBtns.children.forEach(c => {
@@ -73,6 +75,7 @@ export class CommonBtns extends Component {
 
         this.liveToggle.checkEvents.push(creatEventHandler(this.node, this, 'toggleStreaming'));
         this.sndBtnNode.getComponent(Button).clickEvents.push(creatEventHandler(this.node, this, 'clickVolume'));
+        this.exitBtn.getComponent(Button).clickEvents.push(creatEventHandler(this.node, this, 'clickExit'));
 
         this.autoToggleNode.getComponent(Toggle).clickEvents.push(creatEventHandler(this.node, this, 'toggleAuto'));
         this.denomToggles.forEach((d, i) => {
@@ -113,15 +116,15 @@ export class CommonBtns extends Component {
 
         switch (customEventData) {
             case panelState.basic:
-                emit(evtNode.basicPanel, evtFunc.setPanelActive, isChecked);
+                emitCommonBtns(evtNode.basicPanel, evtFunc.setPanelActive, isChecked);
                 spriteFrameName = 'BG_Basic';
                 break;
             case panelState.fourSum:
-                emit(evtNode.fourSumPanel, evtFunc.setPanelActive, isChecked);
+                emitCommonBtns(evtNode.fourSumPanel, evtFunc.setPanelActive, isChecked);
                 spriteFrameName = 'BG_FourSum';
                 break;
             case panelState.jackpot:
-                emit(evtNode.jackpotPanel, evtFunc.setPanelActive, isChecked);
+                emitCommonBtns(evtNode.jackpotPanel, evtFunc.setPanelActive, isChecked);
                 spriteFrameName = 'BG_Jackpot';
                 break;
         }
@@ -134,11 +137,15 @@ export class CommonBtns extends Component {
 
     private toggleStreaming(event, customEventData) {
         const isChecked = event.target.getComponent(Toggle).isChecked;
-        emit(evtNode.streamingPopup, evtFunc.setPopupActive, isChecked);
+        emitCommonBtns(evtNode.popupManager, evtFunc.toggleStreamingPopup, isChecked);
     }
 
     private clickVolume() {
         this.setSndSprite();
+    }
+
+    private clickExit() {
+        emitCommonBtns(evtNode.popupManager, evtFunc.openExitPopup);
     }
 
     private setSndSprite(volumeIndex?: number) {
@@ -180,10 +187,10 @@ export class CommonBtns extends Component {
         /*
         if (isChecked) {
             const ran = pickRandomNumbers();
-            emit(evtFunc.ballResults, [1, 2, 3, 4]);
+            emitUIManager(evtFunc.ballResults, [1, 2, 3, 4]);
         }
         else {
-            emit(evtFunc.gameEnd);
+            emitUIManager(evtFunc.gameEnd);
         }
         */
         //!--------------------!//
@@ -222,9 +229,9 @@ export class CommonBtns extends Component {
         this.fourSumToggle.isChecked = false;
         this.jackpotToggle.isChecked = false;
 
-        emit(evtNode.basicPanel, evtFunc.setPanelActive, false);
-        emit(evtNode.fourSumPanel, evtFunc.setPanelActive, false);
-        emit(evtNode.jackpotPanel, evtFunc.setPanelActive, false);
+        emitCommonBtns(evtNode.basicPanel, evtFunc.setPanelActive, false);
+        emitCommonBtns(evtNode.fourSumPanel, evtFunc.setPanelActive, false);
+        emitCommonBtns(evtNode.jackpotPanel, evtFunc.setPanelActive, false);
 
         const panel = gameConfig.panel;
         gameConfig.panel = null;
@@ -249,69 +256,61 @@ export class CommonBtns extends Component {
     }
 
     private clickClearBtn(event, customEventData) {
-        if (!gameConfig.isBettable) return;
-
         switch (gameConfig.panel) {
             case panelState.basic:
-                emit(evtFunc.clearBasic);
+                emitUIManager(evtFunc.clearBasic);
                 break;
 
             case panelState.fourSum:
-                emit(evtFunc.clearFourSum);
+                emitUIManager(evtFunc.clearFourSum);
                 break;
 
             case panelState.jackpot:
-                emit(evtFunc.clearJackpot);
+                emitUIManager(evtFunc.clearJackpot);
                 break;
         }
     }
 
     private clickDoubleBtn(event, customEventData) {
-        if (!gameConfig.isBettable) return;
-
         switch (gameConfig.panel) {
             case panelState.basic:
-                emit(evtNode.basicPanel, evtFunc.doubleBetting);
+                emitCommonBtns(evtNode.basicPanel, evtFunc.doubleBetting);
                 break;
 
             case panelState.fourSum:
-                emit(evtNode.fourSumPanel, evtFunc.doubleBetting);
+                emitCommonBtns(evtNode.fourSumPanel, evtFunc.doubleBetting);
                 break;
         }
     }
 
     private clickReBetBtn(event, customEventData) {
-        if (!gameConfig.isBettable) return;
-
         switch (gameConfig.panel) {
             case panelState.basic:
-                emit(evtNode.basicPanel, evtFunc.loadBettingHistory);
+                emitCommonBtns(evtNode.basicPanel, evtFunc.loadBettingHistory);
                 break;
 
             case panelState.fourSum:
-                emit(evtNode.fourSumPanel, evtFunc.loadBettingHistory);
+                emitCommonBtns(evtNode.fourSumPanel, evtFunc.loadBettingHistory);
                 break;
 
             case panelState.jackpot:
-                emit(evtNode.jackpotPanel, evtFunc.loadBettingHistory);
+                emitCommonBtns(evtNode.jackpotPanel, evtFunc.loadBettingHistory);
                 break;
         }
     }
 
     private clickUndoBtn(event, customEventData) {
-        if (!gameConfig.isBettable) return;
-
         switch (gameConfig.panel) {
             case panelState.basic:
-                emit(evtNode.basicPanel, evtFunc.undoBetting);
+                emitCommonBtns(evtNode.basicPanel, evtFunc.undoBetting);
                 break;
 
             case panelState.fourSum:
-                emit(evtNode.fourSumPanel, evtFunc.undoBetting);
+                emitCommonBtns(evtNode.fourSumPanel, evtFunc.undoBetting);
                 break;
 
             case panelState.jackpot:
-                emit(evtNode.jackpotPanel, evtFunc.undoBetting);
+                emitCommonBtns(evtNode.jackpotPanel, evtFunc.undoBetting);
                 break;
         }
     }
@@ -339,11 +338,46 @@ export class CommonBtns extends Component {
             t.interactable = true;
         });
     }
+
+    public bettingBtnsLock() {
+        this.clearBtn.interactable = false;
+        this.doubleBtn.interactable = false;
+        this.reBetBtn.interactable = false;
+        this.undoBtn.interactable = false;
+    }
+
+    public bettingBtnsUnlock() {
+        this.clearBtn.interactable = true;
+        this.doubleBtn.interactable = true;
+        this.reBetBtn.interactable = true;
+        this.undoBtn.interactable = true;
+    }
+
+    public hideChipBtns() {
+        this.chipBtnNodes.forEach(c => {
+            c.active = false;
+        });
+
+        this.chipOverSprNode.active = false;
+    }
+
+    public showChipBtns() {
+        this.chipBtnNodes.forEach(c => {
+            c.active = true;
+        });
+
+        this.chipOverSprNode.active = true;
+    }
 }
 
-function emit(...args: any[]) {
+function emitCommonBtns(...args: any[]) {
     EventManager.instance.node.emit(evtNode.commonBtns, args);
 }
+
+function emitUIManager(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.uiManager, args);
+}
+
 
 
 

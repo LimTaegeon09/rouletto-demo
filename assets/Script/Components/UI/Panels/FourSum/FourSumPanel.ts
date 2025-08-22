@@ -37,7 +37,7 @@ export class FourSumPanel extends Component {
 
     private clickPanel(event, customEventData) {
         const node = this.chipNodes[parseInt(customEventData)];
-        if (gameConfig.currentBet == 0 || !gameConfig.isBettable || !node) return;
+        if (gameConfig.currentBet == 0 || !node) return;
 
         const chip = node.getChildByName('Sprite');
         const label = node.getChildByName('Label').getComponent(Label);
@@ -55,6 +55,7 @@ export class FourSumPanel extends Component {
             // 베팅금액 > 보유크레딧
             if (bet > moneyConfig.credit) {
                 Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
+                emitUIManager(evtFunc.showNotCredit, evtNode.fourSumPanel, chip.worldPosition);
                 return;
             }
 
@@ -69,6 +70,7 @@ export class FourSumPanel extends Component {
             // 이미 최대 제한 도달
             if (previousBet >= GameConstants.MAX_BET_FOURSUM) {
                 Console.css("%cMax bet reached for FourSum.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
+                emitUIManager(evtFunc.showMaxBet, evtNode.fourSumPanel, chip.worldPosition);
                 return;
             }
 
@@ -80,6 +82,7 @@ export class FourSumPanel extends Component {
             // 베팅금액 > 보유크레딧
             if (bet > moneyConfig.credit) {
                 Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
+                emitUIManager(evtFunc.showNotCredit, evtNode.fourSumPanel, chip.worldPosition);
                 return;
             }
 
@@ -88,11 +91,23 @@ export class FourSumPanel extends Component {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        emit(evtFunc.addFourSumBet, bet);
+        emitCommonManager(evtFunc.addFourSumBet, bet);
 
         this.currentBettingRecord.push({
             chipNode: node,
             betMoney: bet
+        });
+    }
+
+    public bettingBtnsLock() {
+        this.chipNodes.forEach((a, i) => {
+            a.getComponent(Button).interactable = false;
+        });
+    }
+
+    public bettingBtnsUnlock() {
+        this.chipNodes.forEach((a, i) => {
+            a.getComponent(Button).interactable = true;
         });
     }
 
@@ -177,7 +192,7 @@ export class FourSumPanel extends Component {
             label.string = formatNumber(change);
         }
 
-        emit(evtFunc.subFourSumBet, bet);
+        emitCommonManager(evtFunc.subFourSumBet, bet);
     }
 
     public doubleBetting() {
@@ -200,7 +215,7 @@ export class FourSumPanel extends Component {
 
             label.string = formatNumber(previousBet + increaseBet);
 
-            emit(evtFunc.addFourSumBet, increaseBet);
+            emitCommonManager(evtFunc.addFourSumBet, increaseBet);
 
             doubleBettingInfoArr.push({
                 chipNode: node,
@@ -249,7 +264,7 @@ export class FourSumPanel extends Component {
             const label = node.getChildByName('Label').getComponent(Label);
             label.string = formatNumber(bet);
 
-            emit(evtFunc.addFourSumBet, bet);
+            emitCommonManager(evtFunc.addFourSumBet, bet);
 
             reBettingInfoArr.push({
                 chipNode: node,
@@ -265,8 +280,12 @@ export class FourSumPanel extends Component {
     }
 }
 
-function emit(...args: any[]) {
+function emitCommonManager(...args: any[]) {
     EventManager.instance.node.emit(evtNode.commonManager, args);
+}
+
+function emitUIManager(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.uiManager, args);
 }
 
 

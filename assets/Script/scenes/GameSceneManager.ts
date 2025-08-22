@@ -1,6 +1,7 @@
 import { _decorator, Component, find, screen } from 'cc';
+import { PREVIEW } from 'cc/env';
 import { UIManager } from '../Components/UI/UIManager';
-import { Console } from '../Configs/Config';
+import { Console, isPlayableForPREVIEW } from '../Configs/Config';
 import { GameConstants } from '../Configs/GameConstants';
 import { WebSocketClient } from '../Network/WebSocketClient';
 import { WebSocketMsg } from '../Network/WebSocketMsg';
@@ -51,7 +52,7 @@ export class GameSceneManager extends Component {
     }
 
     private receiveCallback(data: any) {
-        //return;
+        if (PREVIEW && !isPlayableForPREVIEW) return;
 
         Console.css("%cReceived data", 'color: #000000; background: #B8E7B8; font-weight: bold;', data);
 

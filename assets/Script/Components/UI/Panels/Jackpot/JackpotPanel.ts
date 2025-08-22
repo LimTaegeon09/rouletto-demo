@@ -95,6 +95,18 @@ export class JackpotPanel extends Component {
             this.jackpotPages[p.pageIndex].loadBettingHistory(p.betNumbers);
         });
     }
+
+    public bettingBtnsLock() {
+        this.jackpotPages.forEach(j => {
+            j.bettingBtnsLock();
+        });
+    }
+
+    public bettingBtnsUnlock() {
+        this.jackpotPages.forEach(j => {
+            j.bettingBtnsUnlock();
+        });
+    }
 }
 
 function emit(...args: any[]) {

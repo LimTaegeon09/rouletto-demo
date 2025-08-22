@@ -76,7 +76,7 @@ export class BasicPanel extends Component {
 
     private clickPanel(event, customEventData) {
         const node = this.allChipNodes[parseInt(customEventData)];
-        if (gameConfig.currentBet === 0 || !gameConfig.isBettable || !node) return;
+        if (gameConfig.currentBet === 0 || !node) return;
 
         const chip = node.getChildByName('Sprite');
         const label = node.getChildByName('Label').getComponent(Label);
@@ -94,6 +94,7 @@ export class BasicPanel extends Component {
             // 베팅금액 > 보유크레딧
             if (bet > moneyConfig.credit) {
                 Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
+                emitUIManager(evtFunc.showNotCredit, evtNode.basicPanel, chip.worldPosition);
                 return;
             }
 
@@ -108,6 +109,7 @@ export class BasicPanel extends Component {
             // 이미 최대 제한 도달
             if (previousBet >= GameConstants.MAX_BET_BASIC) {
                 Console.css("%cMax bet reached for Basic.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
+                emitUIManager(evtFunc.showMaxBet, evtNode.basicPanel, chip.worldPosition);
                 return;
             }
 
@@ -119,6 +121,7 @@ export class BasicPanel extends Component {
             // 베팅금액 > 보유크레딧
             if (bet > moneyConfig.credit) {
                 Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
+                emitUIManager(evtFunc.showNotCredit, evtNode.basicPanel, chip.worldPosition);
                 return;
             }
 
@@ -127,11 +130,23 @@ export class BasicPanel extends Component {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        emit(evtFunc.addBasicBet, bet);
+        emitCommonManager(evtFunc.addBasicBet, bet);
 
         this.currentBettingRecord.push({
             chipNode: node,
             betMoney: bet
+        });
+    }
+
+    public bettingBtnsLock() {
+        this.allChipNodes.forEach((a, i) => {
+            a.getComponent(Button).interactable = false;
+        });
+    }
+
+    public bettingBtnsUnlock() {
+        this.allChipNodes.forEach((a, i) => {
+            a.getComponent(Button).interactable = true;
         });
     }
 
@@ -243,7 +258,7 @@ export class BasicPanel extends Component {
             label.string = formatNumber(change);
         }
 
-        emit(evtFunc.subBasicBet, bet);
+        emitCommonManager(evtFunc.subBasicBet, bet);
     }
 
     public doubleBetting() {
@@ -266,7 +281,7 @@ export class BasicPanel extends Component {
 
             label.string = formatNumber(previousBet + increaseBet);
 
-            emit(evtFunc.addBasicBet, increaseBet);
+            emitCommonManager(evtFunc.addBasicBet, increaseBet);
 
             doubleBettingInfoArr.push({
                 chipNode: node,
@@ -315,7 +330,7 @@ export class BasicPanel extends Component {
             const label = node.getChildByName('Label').getComponent(Label);
             label.string = formatNumber(bet);
 
-            emit(evtFunc.addBasicBet, bet);
+            emitCommonManager(evtFunc.addBasicBet, bet);
 
             reBettingInfoArr.push({
                 chipNode: node,
@@ -331,8 +346,12 @@ export class BasicPanel extends Component {
     }
 }
 
-function emit(...args: any[]) {
+function emitCommonManager(...args: any[]) {
     EventManager.instance.node.emit(evtNode.commonManager, args);
+}
+
+function emitUIManager(...args: any[]) {
+    EventManager.instance.node.emit(evtNode.uiManager, args);
 }
 
 

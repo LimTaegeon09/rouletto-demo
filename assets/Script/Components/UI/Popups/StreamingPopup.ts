@@ -11,6 +11,8 @@ export class StreamingPopup extends Component {
         this.node.setPosition(0, 0);
         this.node.active = active;
     }
+
+
 }
 
 

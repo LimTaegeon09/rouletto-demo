@@ -1,5 +1,6 @@
 import { _decorator, Component } from 'cc';
-import { Console, gameConfig } from '../../Configs/Config';
+import { PREVIEW } from 'cc/env';
+import { Console, gameConfig, isPlayableForPREVIEW, moneyConfig } from '../../Configs/Config';
 import { GameConstants } from '../../Configs/GameConstants';
 import { EventManager, evtFunc, evtNode } from '../EventManager';
 import { CommonBtns } from './Common/CommonBtns';
@@ -11,7 +12,8 @@ import { BasicPrizeCalculator } from './Panels/Basic/BasicPrizeCalculator';
 import { FourSumPanel } from './Panels/FourSum/FourSumPanel';
 import { FourSumPrizeCalculator } from './Panels/FourSum/FourSumPrizeCalculator';
 import { JackpotPanel } from './Panels/Jackpot/JackpotPanel';
-import { StreamingPopup } from './Popups/StreamingPopup';
+import { PopupManager } from './Popups/PopupManager';
+import { PresentationManager } from './Presentation/PresentationManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIManager')
@@ -31,9 +33,12 @@ export class UIManager extends Component {
 
     private jackpotPanel: JackpotPanel = null;
 
-    private streamingPopup: StreamingPopup = null;
+    private presentationManager: PresentationManager = null;
+    private popupManager: PopupManager = null;
 
     private ballNums: any[] = [];
+
+    private bettingEndOnce: boolean = true;
 
     protected onLoad(): void {
         const common = this.node.getChildByName('Common');
@@ -53,12 +58,62 @@ export class UIManager extends Component {
 
         this.jackpotPanel = this.node.getChildByName('Jackpot').getComponent(JackpotPanel);
 
-        this.streamingPopup = this.node.getChildByName('Streaming').getComponent(StreamingPopup);
+        this.presentationManager = this.node.getChildByName('Presentation').getComponent(PresentationManager);
+        this.popupManager = this.node.getChildByName('Popup').getComponent(PopupManager);
 
         ///////////////////////////////////////////////
 
+        EventManager.instance.node.on(evtNode.uiManager, this.evtUIManager, this);
         EventManager.instance.node.on(evtNode.commonManager, this.evtCommonManager, this);
         EventManager.instance.node.on(evtNode.commonBtns, this.evtCommonBtns, this);
+    }
+
+    protected start(): void {
+        if (PREVIEW && !isPlayableForPREVIEW) {
+            this.bettingBtnsUnlock(); // Unlock 함으로써 버튼 테스트
+        }
+        else {
+            this.bettingBtnsLock(); // 정상적으로 Lock
+        }
+    }
+
+    private evtUIManager(args: any[]) {
+        switch (args[0]) {
+            case evtFunc.bettingEnd:
+                this.bettingEnd();
+                break;
+
+            case evtFunc.ballResults:
+                // for Test
+                this.ballResults(args[1]);
+                this.numberConfirm();
+                break;
+
+            case evtFunc.gameEnd:
+                // for Test
+                this.gameEnd();
+                break;
+
+            case evtFunc.clearBasic:
+                this.clearBasic();
+                break;
+
+            case evtFunc.clearFourSum:
+                this.clearFourSum();
+                break;
+
+            case evtFunc.clearJackpot:
+                this.clearJackpot();
+                break;
+
+            case evtFunc.showMaxBet:
+                this.presentationManager.showMaxBet(args[1], args[2]);
+                break;
+
+            case evtFunc.showNotCredit:
+                this.presentationManager.showNotCredit(args[1], args[2]);
+                break;
+        }
     }
 
     private evtCommonManager(args: any[]) {
@@ -115,32 +170,14 @@ export class UIManager extends Component {
                 else if (args[1] === evtFunc.undoBetting) this.jackpotPanel.undoBetting();
                 break;
 
-            case evtNode.streamingPopup:
-                if (args[1] === evtFunc.setPopupActive) this.streamingPopup.setPopupActive(args[2]);
+            case evtNode.popupManager:
+                if (args[1] === evtFunc.openExitPopup) this.popupManager.openExitPopup();
+                else if (args[1] === evtFunc.toggleStreamingPopup) this.popupManager.toggleStreamingPopup(args[2]);
                 break;
+        }
 
-            case evtFunc.ballResults:
-                // for Test
-                this.ballResults(args[1]);
-                this.numberConfirm();
-                break;
-
-            case evtFunc.gameEnd:
-                // for Test
-                this.gameEnd();
-                break;
-
-            case evtFunc.clearBasic:
-                this.clearBasic();
-                break;
-
-            case evtFunc.clearFourSum:
-                this.clearFourSum();
-                break;
-
-            case evtFunc.clearJackpot:
-                this.clearJackpot();
-                break;
+        if (args[1] === evtFunc.setPanelActive) {
+            if (args[2] === true) this.presentationManager.hideMoneyIssue();
         }
     }
 
@@ -150,23 +187,38 @@ export class UIManager extends Component {
     public gameStart() {
         this.timer.setPlaceYourBet(GameConstants.COUNTDOWN_TIME);
 
+        this.bettingBtnsUnlock();
+
         this.commonManager.initBet();
+
         if (gameConfig.isJackpotWin) {
             gameConfig.isJackpotWin = false;
             this.commonManager.initJackpotWin();
         }
 
         this.loadBettingHistory();
+
+        this.presentationManager.endNGS();
+        this.presentationManager.startPYB();
+
+        this.bettingEndOnce = true;
     }
 
     // "nomorebet"
     public bettingEnd() {
+        if (this.bettingEndOnce) this.bettingEndOnce = false;
+        else return;
+
         this.timer.setNoMoreBet();
+
+        this.bettingBtnsLock();
 
         this.commonManager.initWin();
         this.commonManager.addJackpotWin(this.jackpotPanel.getIsBetting());
 
         this.saveBettingHistory();
+
+        this.presentationManager.startNMB();
     }
 
     // "spinball"
@@ -221,6 +273,11 @@ export class UIManager extends Component {
         this.fourSumPrizeCalculator.calculate();
 
         this.commonBtn.winStart();
+
+        if (moneyConfig.win > 0) {
+            this.commonBtn.hideChipBtns();
+            this.presentationManager.startTotalWin(moneyConfig.win);
+        }
     }
 
     // "end"
@@ -231,6 +288,13 @@ export class UIManager extends Component {
 
         this.commonBtn.winEnd();
         this.commonManager.gameEnd();
+
+        this.presentationManager.startNGS();
+
+        if (moneyConfig.win > 0) {
+            this.commonBtn.showChipBtns();
+            this.presentationManager.endTotalWin();
+        }
     }
 
     ///////////////////////////////////////////////
@@ -264,6 +328,20 @@ export class UIManager extends Component {
         this.basicPanel.loadBettingHistory();
         this.fourSumPanel.loadBettingHistory();
         this.jackpotPanel.loadBettingHistory();
+    }
+
+    public bettingBtnsLock() {
+        this.commonBtn.bettingBtnsLock();
+        this.basicPanel.bettingBtnsLock();
+        this.fourSumPanel.bettingBtnsLock();
+        this.jackpotPanel.bettingBtnsLock();
+    }
+
+    public bettingBtnsUnlock() {
+        this.commonBtn.bettingBtnsUnlock();
+        this.basicPanel.bettingBtnsUnlock();
+        this.fourSumPanel.bettingBtnsUnlock();
+        this.jackpotPanel.bettingBtnsUnlock();
     }
 
 }

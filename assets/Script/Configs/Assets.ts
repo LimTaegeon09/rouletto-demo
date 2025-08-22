@@ -15,6 +15,8 @@ export class Assets {
     public sumAtlas: SpriteAtlas = null;
     public jackpotAtlas: SpriteAtlas = null;
     public liveCamAtlas: SpriteAtlas = null;
+    public helpAtlas: SpriteAtlas = null;
+    public effectAtlas: SpriteAtlas = null;
 
     //!------------------------------------
 

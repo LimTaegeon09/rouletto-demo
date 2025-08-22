@@ -4,22 +4,22 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>area_sample.png</key>
+            <key>img_help.jpg</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1392,783}</string>
+                <string>{1280,717}</string>
                 <key>spriteSourceSize</key>
-                <string>{1392,783}</string>
+                <string>{1280,717}</string>
                 <key>textureRect</key>
-                <string>{{1,1},{1392,783}}</string>
+                <string>{{1,1},{1280,717}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>line_livecam_40.png</key>
+            <key>line_help_40.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -30,7 +30,7 @@
                 <key>spriteSourceSize</key>
                 <string>{143,298}</string>
                 <key>textureRect</key>
-                <string>{{1395,1},{143,298}}</string>
+                <string>{{1283,1},{143,298}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -44,13 +44,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>liveCam.png</string>
+            <string>help.png</string>
             <key>size</key>
-            <string>{1539,785}</string>
+            <string>{1427,719}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:d7aa6cd597b1f5deec95ea46323286d2:c3c19c6f3e03b703178f7d4c87723f8f:cd80e120e4f29c7cb8e442bd7e25b3e4$</string>
+            <string>$TexturePacker:SmartUpdate:4758e0dbf39416e06e655ec9a07c37be:c992299aa39fa45f7b849d479a0294f5:b748d28db2ead7fdbe4aa6481e4be26c$</string>
             <key>textureFileName</key>
-            <string>liveCam.png</string>
+            <string>help.png</string>
         </dict>
     </dict>
 </plist>

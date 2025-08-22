@@ -2,17 +2,17 @@ import { _decorator, Component } from 'cc';
 const { ccclass, property } = _decorator;
 
 export const evtNode = {
+    uiManager: 'uiManager',
     commonManager: 'commonManager',
     commonBtns: 'commonBtns',
     basicPanel: 'basicPanel',
     fourSumPanel: 'fourSumPanel',
     jackpotPanel: 'jackpotPanel',
-    streamingPopup: 'streamingPopup'
+    popupManager: 'popupManager',
 };
 
 export const evtFunc = {
     setPanelActive: 'setPanelActive',
-    setPopupActive: 'setPopupActive',
     ballResults: 'ballResults',
     clearBasic: 'clearBasic',
     clearFourSum: 'clearFourSum',
@@ -30,6 +30,11 @@ export const evtFunc = {
     addPageRecord: 'addPageRecord',
     removePageRecord: 'removePageRecord',
     gameEnd: 'gameEnd',
+    bettingEnd: 'bettingEnd',
+    openExitPopup: 'openExitPopup',
+    toggleStreamingPopup: 'toggleStreamingPopup',
+    showMaxBet: 'showMaxBet',
+    showNotCredit: 'showNotCredit',
 }
 
 @ccclass('EventManager')

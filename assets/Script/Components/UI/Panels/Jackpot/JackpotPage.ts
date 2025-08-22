@@ -1,5 +1,5 @@
 import { _decorator, Button, Component, Label, Node, Sprite } from 'cc';
-import { Console, gameConfig, moneyConfig } from 'db://assets/Script/Configs/Config';
+import { Console, moneyConfig } from 'db://assets/Script/Configs/Config';
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { creatEventHandler, formatNumber, pickRandomNumbers } from 'db://assets/Script/Utils/Utils';
 import { EventManager, evtFunc, evtNode } from '../../../EventManager';
@@ -48,13 +48,9 @@ export class JackpotPage extends Component {
     start() {
         const label = this.chipNode.getChildByName('Label').getComponent(Label);
         label.string = formatNumber(GameConstants.MIN_BET_JACKPOT);
-
-        this.betBtn.interactable = false;
     }
 
     private clickNum(event, customEventData) {
-        if (!gameConfig.isBettable) return;
-
         let index = parseInt(customEventData);
         const spr = this.numNodes[index].getComponent(Sprite);
 
@@ -74,46 +70,51 @@ export class JackpotPage extends Component {
     }
 
     private clickBetBtn() {
-        if (!gameConfig.isBettable) return;
+        if (!this.isBetting) {
+            if (moneyConfig.credit < GameConstants.MIN_BET_JACKPOT) {
+                Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
+                emit(evtNode.uiManager, evtFunc.showNotCredit, evtNode.jackpotPanel, this.betBtn.node.worldPosition);
+                return;
+            }
 
-        if (moneyConfig.credit < GameConstants.MIN_BET_JACKPOT) {
-            Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
-            return;
+            this.chipNode.active = true;
+            emit(evtNode.commonManager, evtFunc.addJackpotBet);
+
+            this.numNodes.forEach(n => {
+                n.getComponent(Button).interactable = false;
+            });
+            this.betLabel.string = 'BET: $' + formatNumber(GameConstants.MIN_BET_JACKPOT);
+
+            emit(evtNode.jackpotPanel, evtFunc.addPageRecord, this.index, this.numNodes);
+
+            const atlas = this.betBtn.getComponent(Sprite).spriteAtlas;
+            this.betBtn.normalSprite = atlas.getSpriteFrame('BTN-Cancel_off');
+            this.betBtn.pressedSprite = atlas.getSpriteFrame('BTN-Cancel_on');
+
+            this.ranBtn.interactable = false;
         }
-
-        this.chipNode.active = true;
-        emit(evtNode.commonManager, evtFunc.addJackpotBet);
-
-        this.numNodes.forEach(n => {
-            n.getComponent(Button).interactable = false;
-        });
-        this.betBtn.interactable = false;
-
-        this.betLabel.string = 'BET: $' + formatNumber(GameConstants.MIN_BET_JACKPOT);
-
-        ////////////////////////
-
-        this.isBetting = true;
-
-        emit(evtNode.jackpotPanel, evtFunc.addPageRecord, this.index, this.numNodes);
-    }
-
-    private clickRandomBtn(event, customEventData) {
-        if (!gameConfig.isBettable) return;
-
-        this.betBtn.interactable = true;
-
-        if (this.isBetting) {
-            this.betLabel.string = 'BET: $0';
+        else {
+            this.chipNode.active = false;
+            emit(evtNode.commonManager, evtFunc.subJackpotBet);
 
             this.numNodes.forEach(n => {
                 n.getComponent(Button).interactable = true;
             });
+            this.betLabel.string = 'BET: $0';
 
-            emit(evtNode.commonManager, evtFunc.subJackpotBet);
-            this.chipNode.active = false;
+            emit(evtNode.jackpotPanel, evtFunc.removePageRecord, this.index);
+
+            const atlas = this.betBtn.getComponent(Sprite).spriteAtlas;
+            this.betBtn.normalSprite = atlas.getSpriteFrame('BTN-Bet_off');
+            this.betBtn.pressedSprite = atlas.getSpriteFrame('BTN-Bet_on');
+
+            this.ranBtn.interactable = true;
         }
 
+        this.isBetting = !this.isBetting;
+    }
+
+    private clickRandomBtn(event, customEventData) {
         this.numNodes.forEach(n => {
             n.getComponent(Sprite).enabled = false;
         });
@@ -123,11 +124,21 @@ export class JackpotPage extends Component {
             this.numNodes[this.numbers[i]].getComponent(Sprite).enabled = true;
         }
 
-        //////////////////////////////
+        this.betBtn.interactable = true;
+    }
 
-        this.isBetting = false;
+    public bettingBtnsLock() {
+        this.numNodes.forEach((d, i) => {
+            d.getComponent(Button).interactable = false;
+        });
+        this.ranBtn.interactable = false;
+    }
 
-        emit(evtNode.jackpotPanel, evtFunc.removePageRecord, this.index);
+    public bettingBtnsUnlock() {
+        this.numNodes.forEach((d, i) => {
+            d.getComponent(Button).interactable = true;
+        });
+        this.ranBtn.interactable = true;
     }
 
     public winStart(numbers: number[]) {
@@ -152,7 +163,14 @@ export class JackpotPage extends Component {
             n.getComponent(Sprite).enabled = false;
             n.getComponent(Button).interactable = true;
         });
+        this.ranBtn.interactable = true;
+
+        const atlas = this.betBtn.getComponent(Sprite).spriteAtlas;
+        this.betBtn.normalSprite = atlas.getSpriteFrame('BTN-Bet_off');
+        this.betBtn.pressedSprite = atlas.getSpriteFrame('BTN-Bet_on');
+
         this.betBtn.interactable = false;
+
         this.winNode.active = false;
 
         this.numbers = [];
