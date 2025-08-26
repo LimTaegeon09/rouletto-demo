@@ -46,12 +46,24 @@ export const WebSocketMsg = {
         "data": "end"
     },
 
-    gameErr: {
+    errMainOpen: {
         "type": "error",
-        "data": ""
-    }
+        "data": "main door open"
+    },
 
+    errCasingOpen: {
+        "type": "error",
+        "data": "casing door open"
+    },
 
+    errDisconnect: {
+        "type": "error",
+        "data": "disconnect"
+    },
 
+    errBallNumberFail: {
+        "type": "error",
+        "data": "ball number fail"
+    },
 }
 

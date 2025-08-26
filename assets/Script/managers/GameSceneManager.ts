@@ -34,6 +34,13 @@ export class GameSceneManager extends Component {
 
     }
 
+    private audioEnable(event, customEventData) {
+        this.uiManager.commonBtn.setVolume(parseInt(customEventData));
+
+        const interactionLayer = find('Canvas/UI').getChildByName('InteractionLayer');
+        interactionLayer.active = false;
+    }
+
     private openWebsocket() {
         WebSocketClient.open();
         WebSocketClient.instance.onopen = (e) => {
@@ -59,32 +66,37 @@ export class GameSceneManager extends Component {
         WebSocketClient.type = data['type'];
         WebSocketClient.data = data['data'];
 
-        if (WebSocketClient.checkMsg(WebSocketMsg.gameStart)) {
+        if (WebSocketClient.checkMsgType(WebSocketMsg.gameStart)) {
             this.uiManager.gameStart();
         }
 
-        else if (WebSocketClient.checkMsg(WebSocketMsg.bettingEnd)) {
+        else if (WebSocketClient.checkMsgType(WebSocketMsg.bettingEnd)) {
             this.uiManager.bettingEnd();
         }
 
-        else if (WebSocketClient.checkMsg(WebSocketMsg.spinBall)) {
+        else if (WebSocketClient.checkMsgType(WebSocketMsg.spinBall)) {
             this.uiManager.spinBall();
         }
 
-        else if (WebSocketClient.checkMsg(WebSocketMsg.ballResults)) {
+        else if (WebSocketClient.checkMsgType(WebSocketMsg.ballResults)) {
             this.uiManager.ballResults(data['data']);
         }
 
-        else if (WebSocketClient.checkMsg(WebSocketMsg.numberConfirm)) {
+        else if (WebSocketClient.checkMsgType(WebSocketMsg.numberConfirm)) {
             this.uiManager.numberConfirm();
         }
 
-        else if (WebSocketClient.checkMsg(WebSocketMsg.gameEnd)) {
+        else if (WebSocketClient.checkMsgType(WebSocketMsg.gameEnd)) {
             this.uiManager.gameEnd();
         }
+
+        else if (WebSocketClient.checkMsg(WebSocketMsg.errMainOpen) ||
+            WebSocketClient.checkMsg(WebSocketMsg.errCasingOpen) ||
+            WebSocketClient.checkMsg(WebSocketMsg.errDisconnect) ||
+            WebSocketClient.checkMsg(WebSocketMsg.errBallNumberFail)) {
+            this.uiManager.gameErr();
+        }
     }
-
-
 }
 
 

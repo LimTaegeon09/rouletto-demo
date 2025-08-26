@@ -1,12 +1,12 @@
-import { _decorator, Component, director, Font, resources, screen, setDisplayStats, SpriteAtlas } from 'cc';
+import { _decorator, AudioClip, Component, director, Font, resources, screen, setDisplayStats, SpriteAtlas } from 'cc';
 import { PREVIEW } from 'cc/env';
-import packageJson from '../../../package.json';
 import { Assets } from '../Configs/Assets';
 import { Console, moneyConfig } from '../Configs/Config';
 import { ConfigManager } from '../Configs/ConfigManager';
 import { GameConstants } from '../Configs/GameConstants';
 import { WebSocketClient } from '../Network/WebSocketClient';
 import { WebSocketMsg } from '../Network/WebSocketMsg';
+import { SoundManager } from './SoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('LoadSceneManager')
@@ -16,12 +16,11 @@ export class LoadSceneManager extends Component {
 
     private readonly imageCnt: number = 9;
     private readonly fontCnt: number = 11;
-
     private readonly sceneCnt: number = 1;
-
     private readonly wsCnt: number = 1;
+    private readonly sndCnt: number = 21;
 
-    private readonly totalCnt: number = this.imageCnt + this.fontCnt + this.sceneCnt + this.wsCnt;
+    private readonly totalCnt: number = this.imageCnt + this.fontCnt + this.sceneCnt + this.wsCnt + this.sndCnt;
 
     private loadedCnt: number = 0;
 
@@ -53,9 +52,8 @@ export class LoadSceneManager extends Component {
         if (PREVIEW) window.onresize();
         screen.windowSize = screen.windowSize;
 
-        this.openWebsocket();
-
         this.loadAssets();
+        this.openWebsocket();
     }
 
     private openWebsocket() {
@@ -81,7 +79,7 @@ export class LoadSceneManager extends Component {
         WebSocketClient.type = data['type'];
         WebSocketClient.data = data['data'];
 
-        if (WebSocketClient.checkMsg(WebSocketMsg.isConnected)) {
+        if (WebSocketClient.checkMsgType(WebSocketMsg.isConnected)) {
             this.loadedCnt++;
         }
     }
@@ -136,16 +134,16 @@ export class LoadSceneManager extends Component {
         });
 
         /*****************************************************************
-05_Help
-*****************************************************************/
+        05_Help
+        *****************************************************************/
         resources.load('image/05_Help/help', SpriteAtlas, (err, atlas) => {
             Assets.instance.helpAtlas = atlas;
             this.loadedCnt++;
         });
 
         /*****************************************************************
-06_Effect
-*****************************************************************/
+        06_Effect
+        *****************************************************************/
         resources.load('image/06_Effect/effect', SpriteAtlas, (err, atlas) => {
             Assets.instance.effectAtlas = atlas;
             this.loadedCnt++;
@@ -168,7 +166,21 @@ export class LoadSceneManager extends Component {
         });
 
         /*****************************************************************
-        5. Scene
+        Sounds
+        *****************************************************************/
+        resources.loadDir('sounds', AudioClip, (err, clips) => {
+            if (err) {
+                console.error('사운드 폴더 로드 실패:', err);
+                return;
+            }
+            clips.forEach(clip => {
+                SoundManager.instance.soundMap.set(clip.name, clip);
+                this.loadedCnt++;
+            });
+        });
+
+        /*****************************************************************
+        Scene
         *****************************************************************/
         director.preloadScene("GameScene", () => {
             this.loadedCnt++;

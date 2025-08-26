@@ -46,17 +46,23 @@ export class WebSocketClient extends WebSocket {
         }
     }
 
-    public static checkMsg(msg: any) {
+    public onerror = (e) => {
+        Console.css("%cWebSocket Error", "color: #000000; background: #FFFFFF; font-weight: bold;", e);
+    }
+
+    public static checkMsgType(msg: any) {
         return (WebSocketClient.type === msg['type']);
     }
 
-    public onerror = (e) => {
-        Console.css("%cWebSocket Error", "color: #000000; background: #FFFFFF; font-weight: bold;", e);
+    public static checkMsg(msg: any) {
+        return (WebSocketClient.type === msg['type'] && WebSocketClient.data === msg['data']);
     }
 
     public static get instance() {
         return this._instance;
     }
+
+
 
 }
 

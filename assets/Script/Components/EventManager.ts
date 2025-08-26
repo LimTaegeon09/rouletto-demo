@@ -35,11 +35,13 @@ export const evtFunc = {
     toggleStreamingPopup: 'toggleStreamingPopup',
     showMaxBet: 'showMaxBet',
     showNotCredit: 'showNotCredit',
+    toggleHelpPopup:'toggleHelpPopup',
 }
 
 @ccclass('EventManager')
 export class EventManager extends Component {
     private static _instance: EventManager = null;
+    
     public static get instance(): EventManager {
         return this._instance;
     }
@@ -47,7 +49,8 @@ export class EventManager extends Component {
     protected onLoad(): void {
         if (EventManager._instance === null) {
             EventManager._instance = this;
-        } else {
+        } 
+        else {
             this.destroy();
             return;
         }

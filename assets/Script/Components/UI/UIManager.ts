@@ -2,6 +2,7 @@ import { _decorator, Component } from 'cc';
 import { PREVIEW } from 'cc/env';
 import { Console, gameConfig, isPlayableForPREVIEW, moneyConfig } from '../../Configs/Config';
 import { GameConstants } from '../../Configs/GameConstants';
+import { sndType, SoundManager } from '../../managers/SoundManager';
 import { EventManager, evtFunc, evtNode } from '../EventManager';
 import { CommonBtns } from './Common/CommonBtns';
 import { CommonManager } from './Common/CommonManager';
@@ -16,10 +17,15 @@ import { PopupManager } from './Popups/PopupManager';
 import { PresentationManager } from './Presentation/PresentationManager';
 const { ccclass, property } = _decorator;
 
+enum gameState {
+    gameStart = 'newgame',
+    numberConfirm = 'confirm'
+};
+
 @ccclass('UIManager')
 export class UIManager extends Component {
     private commonManager: CommonManager = null;
-    private commonBtn: CommonBtns = null;
+    public commonBtn: CommonBtns = null;
 
     private historyManager: HistoryManager = null;
 
@@ -38,7 +44,10 @@ export class UIManager extends Component {
 
     private ballNums: any[] = [];
 
-    private bettingEndOnce: boolean = true;
+    private isBettingEndOnce: boolean = true;
+    private isGameErrOnce: boolean = true;
+
+    private currentGameState: string = gameState.gameStart;
 
     protected onLoad(): void {
         const common = this.node.getChildByName('Common');
@@ -173,6 +182,7 @@ export class UIManager extends Component {
             case evtNode.popupManager:
                 if (args[1] === evtFunc.openExitPopup) this.popupManager.openExitPopup();
                 else if (args[1] === evtFunc.toggleStreamingPopup) this.popupManager.toggleStreamingPopup(args[2]);
+                else if (args[1] === evtFunc.toggleHelpPopup) this.popupManager.toggleHelpPopup(args[2]);
                 break;
         }
 
@@ -185,6 +195,8 @@ export class UIManager extends Component {
 
     // "newgame"
     public gameStart() {
+        this.currentGameState = gameState.gameStart;
+
         this.timer.setPlaceYourBet(GameConstants.COUNTDOWN_TIME);
 
         this.bettingBtnsUnlock();
@@ -201,12 +213,17 @@ export class UIManager extends Component {
         this.presentationManager.endNGS();
         this.presentationManager.startPYB();
 
-        this.bettingEndOnce = true;
+        this.popupManager.closeErrorPopup();
+
+        this.isBettingEndOnce = true;
+        this.isGameErrOnce = true;
+
+        SoundManager.instance.play(sndType.placeyourbetsplease);
     }
 
     // "nomorebet"
     public bettingEnd() {
-        if (this.bettingEndOnce) this.bettingEndOnce = false;
+        if (this.isBettingEndOnce) this.isBettingEndOnce = false;
         else return;
 
         this.timer.setNoMoreBet();
@@ -219,11 +236,15 @@ export class UIManager extends Component {
         this.saveBettingHistory();
 
         this.presentationManager.startNMB();
+
+        SoundManager.instance.play(sndType.nomorebets);
     }
 
     // "spinball"
     public spinBall() {
-        this.commonBtn.setStreamingBtn(true);
+        if (!this.popupManager.errorPopupNode.active) {
+            this.commonBtn.setStreamingToggle(true);
+        }
     }
 
     // [1, 2, 3, 4]
@@ -261,6 +282,8 @@ export class UIManager extends Component {
 
     // "confirm"
     public numberConfirm() {
+        this.currentGameState = gameState.numberConfirm;
+
         if (this.ballNums.length === 0) return;
 
         this.historyManager.addHistory(this.ballNums);
@@ -277,6 +300,7 @@ export class UIManager extends Component {
         if (moneyConfig.win > 0) {
             this.commonBtn.hideChipBtns();
             this.presentationManager.startTotalWin(moneyConfig.win);
+            SoundManager.instance.play(sndType.youwin);
         }
     }
 
@@ -291,10 +315,36 @@ export class UIManager extends Component {
 
         this.presentationManager.startNGS();
 
-        if (moneyConfig.win > 0) {
-            this.commonBtn.showChipBtns();
-            this.presentationManager.endTotalWin();
+        this.commonBtn.showChipBtns();
+        this.presentationManager.endTotalWin();
+    }
+
+    public gameErr() {
+        if (this.isGameErrOnce) this.isGameErrOnce = false;
+        else return;
+
+        switch (this.currentGameState) {
+            case gameState.gameStart:
+                this.clearBasic();
+                this.clearFourSum();
+                this.clearJackpot();
+                break;
+
+            case gameState.numberConfirm:
+                this.basicPanel.clearPanel();
+                this.fourSumPanel.clearPanel();
+                this.jackpotPanel.clearPanel();
+
+                this.commonBtn.winEnd();
+                this.commonManager.gameEnd();
+
+                this.commonBtn.showChipBtns();
+                this.presentationManager.endTotalWin();
+                this.presentationManager.endNGS();
+                break;
         }
+
+        this.popupManager.openErrorPopup();
     }
 
     ///////////////////////////////////////////////

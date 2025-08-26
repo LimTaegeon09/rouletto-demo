@@ -358,6 +358,7 @@
                 <false/>
             </struct>
             <key type="filename">../../../../../../Design/00_Common/btn_help.png</key>
+            <key type="filename">../../../../../../Design/00_Common/btn_help_on.png</key>
             <key type="filename">../../../../../../Design/00_Common/btn_live_nor.png</key>
             <key type="filename">../../../../../../Design/00_Common/btn_live_on.png</key>
             <key type="filename">../../../../../../Design/00_Common/btn_sound_off.png</key>
@@ -512,6 +513,7 @@
                     <filename>../../../../../../Design/00_Common/x2_on.png</filename>
                     <filename>../../../../../../Design/00_Common/x5_off.png</filename>
                     <filename>../../../../../../Design/00_Common/x5_on.png</filename>
+                    <filename>../../../../../../Design/00_Common/btn_help_on.png</filename>
                 </array>
             </struct>
         </map>

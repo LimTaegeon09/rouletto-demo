@@ -187,6 +187,7 @@ export class CommonManager extends Component {
         this.initJackpotBet();
 
         this.addCredit(moneyConfig.win);
+        moneyConfig.win = 0;
     }
 
     public clearBasicBet() {

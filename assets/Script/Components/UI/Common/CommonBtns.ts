@@ -1,6 +1,7 @@
-import { _decorator, Button, Component, Label, macro, Node, Sprite, Toggle, ToggleContainer } from 'cc';
+import { _decorator, Button, Component, Label, macro, Node, Sprite, Toggle } from 'cc';
 import { gameConfig, panelState, volumeState } from '../../../Configs/Config';
 import { GameConstants } from '../../../Configs/GameConstants';
+import { sndType, SoundManager } from '../../../managers/SoundManager';
 import { creatEventHandler, formatNumber } from '../../../Utils/Utils';
 import { EventManager, evtFunc, evtNode } from '../../EventManager';
 import { CommonManager } from './CommonManager';
@@ -14,8 +15,9 @@ export class CommonBtns extends Component {
     private fourSumToggle: Toggle = null;
     private jackpotToggle: Toggle = null;
 
-    public liveToggle: Toggle = null;
+    private liveToggle: Toggle = null;
     private sndBtnNode: Node = null;
+    private helpToggle: Toggle = null;
     private exitBtn: Button = null;
 
     private autoToggleNode: Node = null;
@@ -51,6 +53,7 @@ export class CommonBtns extends Component {
 
         this.liveToggle = rightBtns.getChildByName('LiveToggle').getComponent(Toggle);
         this.sndBtnNode = rightBtns.getChildByName('SoundBtn');
+        this.helpToggle = rightBtns.getChildByName('HelpToggle').getComponent(Toggle);
         this.exitBtn = rightBtns.getChildByName('ExitBtn').getComponent(Button);
 
         this.autoToggleNode = bottom.getChildByName('AutoReBet').getChildByName('Toggle');
@@ -75,6 +78,7 @@ export class CommonBtns extends Component {
 
         this.liveToggle.checkEvents.push(creatEventHandler(this.node, this, 'toggleStreaming'));
         this.sndBtnNode.getComponent(Button).clickEvents.push(creatEventHandler(this.node, this, 'clickVolume'));
+        this.helpToggle.checkEvents.push(creatEventHandler(this.node, this, 'toggleHelp'));
         this.exitBtn.getComponent(Button).clickEvents.push(creatEventHandler(this.node, this, 'clickExit'));
 
         this.autoToggleNode.getComponent(Toggle).clickEvents.push(creatEventHandler(this.node, this, 'toggleAuto'));
@@ -99,11 +103,10 @@ export class CommonBtns extends Component {
 
         this.toggleArr = [this.basicToggle, this.fourSumToggle, this.jackpotToggle];
 
-        this.setSndSprite(gameConfig.volume);
+        this.setVolume(gameConfig.volume);
 
-        ////////////////////////
-
-        this.initPanelToggle();
+        this.fourSumToggle.isChecked = false;
+        this.jackpotToggle.isChecked = false;
     }
 
     private togglePanel(event, customEventData) {
@@ -131,44 +134,72 @@ export class CommonBtns extends Component {
         if (isChecked) {
             gameConfig.panel = customEventData;
             this.commonManager.setBgSpr(spriteFrameName);
-            this.setStreamingBtn(false);
+            this.setStreamingToggle(false);
+
+            SoundManager.instance.play(sndType.betting_layout_change);
         }
     }
 
     private toggleStreaming(event, customEventData) {
         const isChecked = event.target.getComponent(Toggle).isChecked;
         emitCommonBtns(evtNode.popupManager, evtFunc.toggleStreamingPopup, isChecked);
+
+        SoundManager.instance.play(sndType.live_cam_button);
+    }
+
+    public setStreamingToggle(is: boolean) {
+        this.liveToggle.isChecked = is;
+    }
+
+    private toggleHelp(event, customEventData) {
+        const isChecked = event.target.getComponent(Toggle).isChecked;
+        emitCommonBtns(evtNode.popupManager, evtFunc.toggleHelpPopup, isChecked);
+
+        SoundManager.instance.play(sndType.help_button);
+    }
+
+    public setHelpToggle(is: boolean) {
+        this.helpToggle.isChecked = is;
     }
 
     private clickVolume() {
-        this.setSndSprite();
+        this.setVolume();
     }
 
     private clickExit() {
         emitCommonBtns(evtNode.popupManager, evtFunc.openExitPopup);
+
+        SoundManager.instance.play(sndType.exit_button);
     }
 
-    private setSndSprite(volumeIndex?: number) {
-        if (volumeIndex != null) gameConfig.volume = volumeIndex;
+    public setVolume(customEventData?: number) {
+        if (customEventData !== null) gameConfig.volume = customEventData;
         else gameConfig.volume++;
 
         if (gameConfig.volume > volumeState.high) gameConfig.volume = volumeState.off;
 
         let spriteFrameName = 'btn_sound_off';
+        SoundManager.instance.volume = 0;
 
         switch (gameConfig.volume) {
             case volumeState.low:
                 spriteFrameName = 'btn_sound_on1';
+                SoundManager.instance.volume = 1 / 3;
                 break;
             case volumeState.mid:
                 spriteFrameName = 'btn_sound_on2';
+                SoundManager.instance.volume = 2 / 3;
                 break;
             case volumeState.high:
                 spriteFrameName = 'btn_sound_on3';
+                SoundManager.instance.volume = 1;
                 break;
         }
         const sndSpr = this.sndBtnNode.getComponent(Sprite);
         sndSpr.spriteFrame = sndSpr.spriteAtlas.getSpriteFrame(spriteFrameName);
+
+        SoundManager.instance.setVolume();
+        SoundManager.instance.play(sndType.voulme_button);
     }
 
     private toggleAuto(event, customEventData) {
@@ -181,6 +212,9 @@ export class CommonBtns extends Component {
         autoSpr.spriteFrame = autoSpr.spriteAtlas.getSpriteFrame(spriteFrameName);
 
         gameConfig.isAutoReBet = isChecked;
+
+        const snd = isChecked ? sndType.autorebet_off_button : sndType.autorebet_on_button;
+        SoundManager.instance.play(snd);
 
 
         //!----- for Test -----!//
@@ -197,21 +231,27 @@ export class CommonBtns extends Component {
     }
 
     private clickDenom(event, customEventData) {
+        let denom = 0;
         switch (parseInt(customEventData)) {
             case 0:
-                gameConfig.denom = 1;
+                denom = 1;
                 break;
             case 1:
-                gameConfig.denom = 2;
+                denom = 2;
                 break;
             case 2:
-                gameConfig.denom = 5;
+                denom = 5;
                 break;
             case 3:
-                gameConfig.denom = 10;
+                denom = 10;
                 break;
         }
+
+        const _denom = gameConfig.denom;
+        gameConfig.denom = denom;
         gameConfig.currentBet = gameConfig.chip * gameConfig.denom;
+
+        if (_denom !== gameConfig.denom) SoundManager.instance.play(sndType.change_denom_button);
     }
 
     private clickChip(event, customEventData) {
@@ -220,39 +260,11 @@ export class CommonBtns extends Component {
         this.chipOverSprNode.setPosition(this.chipBtnNodes[index].getPosition());
         this.chipOverSprNode.active = true;
 
+        const _chip = gameConfig.chip;
         gameConfig.chip = GameConstants.CHIP_VALUES[index];
         gameConfig.currentBet = gameConfig.chip * gameConfig.denom;
-    }
 
-    private initPanelToggle() {
-        this.basicToggle.isChecked = false;
-        this.fourSumToggle.isChecked = false;
-        this.jackpotToggle.isChecked = false;
-
-        emitCommonBtns(evtNode.basicPanel, evtFunc.setPanelActive, false);
-        emitCommonBtns(evtNode.fourSumPanel, evtFunc.setPanelActive, false);
-        emitCommonBtns(evtNode.jackpotPanel, evtFunc.setPanelActive, false);
-
-        const panel = gameConfig.panel;
-        gameConfig.panel = null;
-
-        switch (panel) {
-            case panelState.basic:
-                this.basicToggle.isChecked = true;
-                break;
-            case panelState.fourSum:
-                this.fourSumToggle.isChecked = true;
-                break;
-            case panelState.jackpot:
-                this.jackpotToggle.isChecked = true;
-                break;
-        }
-
-        this.basicToggle.node.parent.getComponent(ToggleContainer).allowSwitchOff = false;
-    }
-
-    public setStreamingBtn(is: boolean) {
-        this.liveToggle.isChecked = is;
+        if (_chip !== gameConfig.chip) SoundManager.instance.play(sndType.chip_select);
     }
 
     private clickClearBtn(event, customEventData) {
@@ -269,6 +281,8 @@ export class CommonBtns extends Component {
                 emitUIManager(evtFunc.clearJackpot);
                 break;
         }
+
+        SoundManager.instance.play(sndType.clear_all_button);
     }
 
     private clickDoubleBtn(event, customEventData) {
@@ -281,6 +295,8 @@ export class CommonBtns extends Component {
                 emitCommonBtns(evtNode.fourSumPanel, evtFunc.doubleBetting);
                 break;
         }
+
+        SoundManager.instance.play(sndType.double_bet_button);
     }
 
     private clickReBetBtn(event, customEventData) {
@@ -297,6 +313,8 @@ export class CommonBtns extends Component {
                 emitCommonBtns(evtNode.jackpotPanel, evtFunc.loadBettingHistory);
                 break;
         }
+
+        SoundManager.instance.play(sndType.rebet_button);
     }
 
     private clickUndoBtn(event, customEventData) {
@@ -313,6 +331,8 @@ export class CommonBtns extends Component {
                 emitCommonBtns(evtNode.jackpotPanel, evtFunc.undoBetting);
                 break;
         }
+
+        SoundManager.instance.play(sndType.undo_button);
     }
 
     public winStart() {

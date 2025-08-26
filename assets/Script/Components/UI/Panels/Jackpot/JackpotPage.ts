@@ -4,6 +4,7 @@ import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { creatEventHandler, formatNumber, pickRandomNumbers } from 'db://assets/Script/Utils/Utils';
 import { EventManager, evtFunc, evtNode } from '../../../EventManager';
 import { JackpotPrizeCalculator } from './JackpotPrizeCalculator';
+import { sndType, SoundManager } from 'db://assets/Script/managers/SoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('JackpotPage')
@@ -74,6 +75,7 @@ export class JackpotPage extends Component {
             if (moneyConfig.credit < GameConstants.MIN_BET_JACKPOT) {
                 Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
                 emit(evtNode.uiManager, evtFunc.showNotCredit, evtNode.jackpotPanel, this.betBtn.node.worldPosition);
+                SoundManager.instance.play(sndType.maxbet_notenoughtmoney_message);
                 return;
             }
 
@@ -92,6 +94,8 @@ export class JackpotPage extends Component {
             this.betBtn.pressedSprite = atlas.getSpriteFrame('BTN-Cancel_on');
 
             this.ranBtn.interactable = false;
+
+            SoundManager.instance.play(sndType.jackpot_game_bet_button);
         }
         else {
             this.chipNode.active = false;
@@ -109,6 +113,8 @@ export class JackpotPage extends Component {
             this.betBtn.pressedSprite = atlas.getSpriteFrame('BTN-Bet_on');
 
             this.ranBtn.interactable = true;
+
+            SoundManager.instance.play(sndType.jackpot_game__cancel_button);
         }
 
         this.isBetting = !this.isBetting;
@@ -125,6 +131,8 @@ export class JackpotPage extends Component {
         }
 
         this.betBtn.interactable = true;
+
+        SoundManager.instance.play(sndType.jackpot_game_random_button);
     }
 
     public bettingBtnsLock() {

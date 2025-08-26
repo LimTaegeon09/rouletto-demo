@@ -3,6 +3,7 @@ import { BettingInfo, Console, gameConfig, moneyConfig } from 'db://assets/Scrip
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { creatEventHandler, formatNumber, parseNumber } from 'db://assets/Script/Utils/Utils';
 import { EventManager, evtFunc, evtNode } from '../../../EventManager';
+import { sndType, SoundManager } from 'db://assets/Script/managers/SoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('FourSumPanel')
@@ -56,6 +57,7 @@ export class FourSumPanel extends Component {
             if (bet > moneyConfig.credit) {
                 Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
                 emitUIManager(evtFunc.showNotCredit, evtNode.fourSumPanel, chip.worldPosition);
+                SoundManager.instance.play(sndType.maxbet_notenoughtmoney_message);
                 return;
             }
 
@@ -71,6 +73,7 @@ export class FourSumPanel extends Component {
             if (previousBet >= GameConstants.MAX_BET_FOURSUM) {
                 Console.css("%cMax bet reached for FourSum.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
                 emitUIManager(evtFunc.showMaxBet, evtNode.fourSumPanel, chip.worldPosition);
+                SoundManager.instance.play(sndType.maxbet_notenoughtmoney_message);
                 return;
             }
 
@@ -83,6 +86,7 @@ export class FourSumPanel extends Component {
             if (bet > moneyConfig.credit) {
                 Console.css("%cNot enough credits.", "color: #ffffff; background:rgb(250, 0, 0); font-weight: bold;");
                 emitUIManager(evtFunc.showNotCredit, evtNode.fourSumPanel, chip.worldPosition);
+                SoundManager.instance.play(sndType.maxbet_notenoughtmoney_message);
                 return;
             }
 
@@ -97,6 +101,8 @@ export class FourSumPanel extends Component {
             chipNode: node,
             betMoney: bet
         });
+
+        SoundManager.instance.play(sndType.betting_chip);
     }
 
     public bettingBtnsLock() {
