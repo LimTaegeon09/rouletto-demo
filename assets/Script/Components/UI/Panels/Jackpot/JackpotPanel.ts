@@ -50,9 +50,9 @@ export class JackpotPanel extends Component {
         });
     }
 
-    public clearPanel() {
+    public clearPanel(is:boolean) {
         this.jackpotPages.forEach(j => {
-            j.clearPage();
+            j.clearPage(is);
         });
 
         this.currentPageRecord = [];
@@ -65,7 +65,7 @@ export class JackpotPanel extends Component {
     public undoBetting() {
         if (this.currentPageRecord.length === 0) return;
 
-        this.jackpotPages[this.currentPageRecord.pop().pageIndex].clearPage();
+        this.jackpotPages[this.currentPageRecord.pop().pageIndex].clearPage(true);        
 
         emit(evtFunc.subJackpotBet);
     }
@@ -99,7 +99,7 @@ export class JackpotPanel extends Component {
     public bettingBtnsLock() {
         this.jackpotPages.forEach(j => {
             j.bettingBtnsLock();
-        });
+        });        
     }
 
     public bettingBtnsUnlock() {

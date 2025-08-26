@@ -14,7 +14,7 @@ export class JackpotPage extends Component {
     private numNodes: Array<Node> = [];
     private numbers: number[] = [];
 
-    private ranBtn: Button = null;
+    public ranBtn: Button = null;
     private betBtn: Button = null;
     private chipNode: Node = null;
     private winLabel: Label = null;
@@ -87,7 +87,7 @@ export class JackpotPage extends Component {
             });
             this.betLabel.string = 'BET: $' + formatNumber(GameConstants.MIN_BET_JACKPOT);
 
-            emit(evtNode.jackpotPanel, evtFunc.addPageRecord, this.index, this.numNodes);
+            emit(evtNode.jackpotPanel, evtFunc.addPageRecord, this.index, this.numbers);
 
             const atlas = this.betBtn.getComponent(Sprite).spriteAtlas;
             this.betBtn.normalSprite = atlas.getSpriteFrame('BTN-Cancel_off');
@@ -140,6 +140,7 @@ export class JackpotPage extends Component {
             d.getComponent(Button).interactable = false;
         });
         this.ranBtn.interactable = false;
+        this.betBtn.interactable = false;
     }
 
     public bettingBtnsUnlock() {
@@ -160,7 +161,7 @@ export class JackpotPage extends Component {
         this.jackpotPrizeCalculator.calculate(numbers, this.numbers);
     }
 
-    public clearPage() {
+    public clearPage(is: boolean) {
         this.isBetting = false;
 
         this.betLabel.string = 'BET: $0';
@@ -169,14 +170,14 @@ export class JackpotPage extends Component {
         this.chipNode.active = false;
         this.numNodes.forEach(n => {
             n.getComponent(Sprite).enabled = false;
-            n.getComponent(Button).interactable = true;
+            n.getComponent(Button).interactable = is;
         });
-        this.ranBtn.interactable = true;
 
         const atlas = this.betBtn.getComponent(Sprite).spriteAtlas;
         this.betBtn.normalSprite = atlas.getSpriteFrame('BTN-Bet_off');
         this.betBtn.pressedSprite = atlas.getSpriteFrame('BTN-Bet_on');
 
+        this.ranBtn.interactable = is;
         this.betBtn.interactable = false;
 
         this.winNode.active = false;
@@ -185,7 +186,7 @@ export class JackpotPage extends Component {
     }
 
     public loadBettingHistory(betNumbers: number[]) {
-        this.clearPage();
+        this.clearPage(false);
 
         this.numbers = [...betNumbers];
 

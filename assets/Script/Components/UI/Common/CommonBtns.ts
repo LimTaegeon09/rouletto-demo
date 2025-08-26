@@ -162,7 +162,7 @@ export class CommonBtns extends Component {
         this.helpToggle.isChecked = is;
     }
 
-    private clickVolume() {
+    private clickVolume() {        
         this.setVolume();
     }
 
@@ -173,7 +173,7 @@ export class CommonBtns extends Component {
     }
 
     public setVolume(customEventData?: number) {
-        if (customEventData !== null) gameConfig.volume = customEventData;
+        if (customEventData != null) gameConfig.volume = customEventData;
         else gameConfig.volume++;
 
         if (gameConfig.volume > volumeState.high) gameConfig.volume = volumeState.off;

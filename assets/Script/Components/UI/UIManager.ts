@@ -308,7 +308,7 @@ export class UIManager extends Component {
     public gameEnd() {
         this.basicPanel.clearPanel();
         this.fourSumPanel.clearPanel();
-        this.jackpotPanel.clearPanel();
+        this.jackpotPanel.clearPanel(false);
 
         this.commonBtn.winEnd();
         this.commonManager.gameEnd();
@@ -333,7 +333,7 @@ export class UIManager extends Component {
             case gameState.numberConfirm:
                 this.basicPanel.clearPanel();
                 this.fourSumPanel.clearPanel();
-                this.jackpotPanel.clearPanel();
+                this.jackpotPanel.clearPanel(false);
 
                 this.commonBtn.winEnd();
                 this.commonManager.gameEnd();
@@ -360,7 +360,7 @@ export class UIManager extends Component {
     }
 
     public clearJackpot() {
-        this.jackpotPanel.clearPanel();
+        this.jackpotPanel.clearPanel(true);
         this.commonManager.clearJackpotBet();
     }
 
