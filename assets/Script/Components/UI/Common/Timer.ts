@@ -1,5 +1,6 @@
 import { _decorator, Component, Label, Node, Sprite, Tween, tween } from 'cc';
-import { gameConfig } from '../../../Configs/Config';
+import { GameConstants } from '../../../Configs/GameConstants';
+import { sndType, SoundManager } from '../../../managers/SoundManager';
 import { EventManager, evtFunc, evtNode } from '../../EventManager';
 const { ccclass, property } = _decorator;
 
@@ -14,7 +15,7 @@ export class Timer extends Component {
     private callsLabel: Label = null;
     private barBgSprNode: Node = null;
     private barSpr: Sprite = null;
-    private barTween: Tween<Sprite> = null;
+    private tweens: Tween<any>[] = [];
 
     protected onLoad(): void {
         this.callsLabel = this.node.getChildByName('CallsLabel').getComponent(Label);
@@ -26,21 +27,25 @@ export class Timer extends Component {
         this.setNoMoreBet();
     }
 
+    public setPlaceYourBet() {
+        this.callsLabel.string = callsStrig.place;
+        this.barBgSprNode.active = true;
+        this.startCountdown(GameConstants.COUNTDOWN_TIME);
+    }
+
     public setNoMoreBet() {
-        if (this.barTween) this.barTween.stop();
+        this.tweens.forEach(t => {
+            t.stop();
+        });
         this.callsLabel.string = callsStrig.noMore;
         this.barBgSprNode.active = false;
         this.barSpr.fillRange = 0;
     }
 
-    public setPlaceYourBet(time: number) {
-        this.callsLabel.string = callsStrig.place;
-        this.barBgSprNode.active = true;
-        this.startCountdown(time);
-    }
-
     private setResult() {
-        if (this.barTween) this.barTween.stop();
+        this.tweens.forEach(t => {
+            t.stop();
+        });
         this.callsLabel.string = callsStrig.result;
         this.barBgSprNode.active = false;
         this.barSpr.fillRange = 0;
@@ -49,10 +54,24 @@ export class Timer extends Component {
     private startCountdown(time: number): void {
         this.barSpr.fillRange = 1;
 
-        this.barTween = tween(this.barSpr)
+        this.tweens[0] = tween(this.barSpr)
             .to(time, { fillRange: 0 })
             .call(() => {
                 emit(evtFunc.bettingEnd);
+            })
+            .start();
+
+        this.tweens[1] = tween(this.node)
+            .delay(time - 10)
+            .call(() => {
+                SoundManager.instance.play(sndType.ten_seconds_remaining);
+            })
+            .start();
+
+        this.tweens[2] = tween(this.node)
+            .delay(time - 9)
+            .call(() => {
+                emit(evtFunc.startCountDown);
             })
             .start();
     }

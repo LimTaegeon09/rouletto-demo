@@ -17,6 +17,8 @@ export class Assets {
     public liveCamAtlas: SpriteAtlas = null;
     public helpAtlas: SpriteAtlas = null;
     public effectAtlas: SpriteAtlas = null;
+    public ngsAtlas0: SpriteAtlas = null;
+    public ngsAtlas1: SpriteAtlas = null;
 
     //!------------------------------------
 

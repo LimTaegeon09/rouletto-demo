@@ -1,7 +1,6 @@
 import { _decorator, Component } from 'cc';
 import { PREVIEW } from 'cc/env';
 import { Console, gameConfig, isPlayableForPREVIEW, moneyConfig } from '../../Configs/Config';
-import { GameConstants } from '../../Configs/GameConstants';
 import { sndType, SoundManager } from '../../managers/SoundManager';
 import { EventManager, evtFunc, evtNode } from '../EventManager';
 import { CommonBtns } from './Common/CommonBtns';
@@ -122,6 +121,10 @@ export class UIManager extends Component {
             case evtFunc.showNotCredit:
                 this.presentationManager.showNotCredit(args[1], args[2]);
                 break;
+
+            case evtFunc.startCountDown:
+                this.presentationManager.startCountDown();
+                break;
         }
     }
 
@@ -197,7 +200,7 @@ export class UIManager extends Component {
     public gameStart() {
         this.currentGameState = gameState.gameStart;
 
-        this.timer.setPlaceYourBet(GameConstants.COUNTDOWN_TIME);
+        this.timer.setPlaceYourBet();
 
         this.bettingBtnsUnlock();
 
@@ -227,6 +230,7 @@ export class UIManager extends Component {
         else return;
 
         this.timer.setNoMoreBet();
+        this.presentationManager.endCountDown();
 
         this.bettingBtnsLock();
 
@@ -240,12 +244,15 @@ export class UIManager extends Component {
         SoundManager.instance.play(sndType.nomorebets);
     }
 
-    // "spinball"
-    public spinBall() {
+    // "spinready"
+    public spinReady() {
         if (!this.popupManager.errorPopupNode.active) {
             this.commonBtn.setStreamingToggle(true);
         }
     }
+
+    // "spinball"
+    public spinBall() { }
 
     // [1, 2, 3, 4]
     public ballResults(data: any) {
@@ -284,6 +291,8 @@ export class UIManager extends Component {
     public numberConfirm() {
         this.currentGameState = gameState.numberConfirm;
 
+        this.commonBtn.setStreamingToggle(false);
+
         if (this.ballNums.length === 0) return;
 
         this.historyManager.addHistory(this.ballNums);
@@ -298,7 +307,6 @@ export class UIManager extends Component {
         this.commonBtn.winStart();
 
         if (moneyConfig.win > 0) {
-            this.commonBtn.hideChipBtns();
             this.presentationManager.startTotalWin(moneyConfig.win);
             SoundManager.instance.play(sndType.youwin);
         }
@@ -314,9 +322,9 @@ export class UIManager extends Component {
         this.commonManager.gameEnd();
 
         this.presentationManager.startNGS();
-
-        this.commonBtn.showChipBtns();
         this.presentationManager.endTotalWin();
+
+        this.historyManager.lightOff();
     }
 
     public gameErr() {
@@ -338,7 +346,6 @@ export class UIManager extends Component {
                 this.commonBtn.winEnd();
                 this.commonManager.gameEnd();
 
-                this.commonBtn.showChipBtns();
                 this.presentationManager.endTotalWin();
                 this.presentationManager.endNGS();
                 break;

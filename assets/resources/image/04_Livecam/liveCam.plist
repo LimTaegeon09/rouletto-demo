@@ -4,21 +4,6 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>area_sample.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{1392,783}</string>
-                <key>spriteSourceSize</key>
-                <string>{1392,783}</string>
-                <key>textureRect</key>
-                <string>{{1,1},{1392,783}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
             <key>line_livecam_40.png</key>
             <dict>
                 <key>aliases</key>
@@ -30,7 +15,7 @@
                 <key>spriteSourceSize</key>
                 <string>{143,298}</string>
                 <key>textureRect</key>
-                <string>{{1395,1},{143,298}}</string>
+                <string>{{1,1},{143,298}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -46,9 +31,9 @@
             <key>realTextureFileName</key>
             <string>liveCam.png</string>
             <key>size</key>
-            <string>{1539,785}</string>
+            <string>{145,300}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:d7aa6cd597b1f5deec95ea46323286d2:c3c19c6f3e03b703178f7d4c87723f8f:cd80e120e4f29c7cb8e442bd7e25b3e4$</string>
+            <string>$TexturePacker:SmartUpdate:1faf9dba253d06549c91367fe1c0e5ea:589a612dcdc749e1e409746de6fd0ee4:cd80e120e4f29c7cb8e442bd7e25b3e4$</string>
             <key>textureFileName</key>
             <string>liveCam.png</string>
         </dict>

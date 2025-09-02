@@ -36,6 +36,7 @@ export const evtFunc = {
     showMaxBet: 'showMaxBet',
     showNotCredit: 'showNotCredit',
     toggleHelpPopup:'toggleHelpPopup',
+    startCountDown:'startCountDown',
 }
 
 @ccclass('EventManager')

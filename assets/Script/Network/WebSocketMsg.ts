@@ -26,8 +26,13 @@ export const WebSocketMsg = {
         "data": "nomorebet"
     },
 
-    spinBall: {
+    spinReady: {
         "type": "St03",
+        "data": "spinready"
+    },
+
+    spinBall: {
+        "type": "St04",
         "data": "spinball"
     },
 
@@ -37,12 +42,12 @@ export const WebSocketMsg = {
     },
 
     numberConfirm: {
-        "type": "St04",
+        "type": "St05",
         "data": "confirm"
     },
 
     gameEnd: {
-        "type": "St05",
+        "type": "St06",
         "data": "end"
     },
 

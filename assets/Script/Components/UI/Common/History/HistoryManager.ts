@@ -30,12 +30,18 @@ export class HistoryManager extends Component {
     public addHistory(data) {
         this.numbers.unshift(data);
         this.setHistory();
+
+        this.historyTop.lightOn();
     }
 
     private setHistory() {
         this.historyTop.setResults(this.numbers);
         this.historyMid.setHotCold(this.numbers);
         this.historyBottom.setGage(this.numbers);
+    }
+
+    public lightOff() {
+        this.historyTop.lightOff();
     }
 
 }

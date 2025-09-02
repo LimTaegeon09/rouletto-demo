@@ -22,7 +22,9 @@ export enum sndType {
     rebet_button = 'rebet_button',
     undo_button = 'undo_button',
     voulme_button = 'voulme_button',
-    youwin = 'youwin'
+    youwin = 'youwin',
+    ten_seconds_remaining = '10_seconds_remaining',
+    casino_ambiance = 'casino-ambiance', // BGM
 }
 
 @ccclass('SoundManager')
@@ -31,6 +33,7 @@ export class SoundManager extends Component {
 
     public soundMap: Map<string, AudioClip> = new Map();
     private effectSources: AudioSource[] = [];
+    private bgmSource: AudioSource = null;
 
     public volume: number = 0;
 
@@ -47,12 +50,18 @@ export class SoundManager extends Component {
     }
 
     protected onLoad(): void {
-        for (let i = 0; i < Object.keys(sndType).length; ++i) {
-            let audioSource = this.addComponent(AudioSource);
-            audioSource.loop = false;
-            audioSource.playOnAwake = false;
-            this.effectSources.push(audioSource);
+        for (let i = 0; i < Object.keys(sndType).length - 1; ++i) {
+            let effectAudioSource = this.addComponent(AudioSource);
+            effectAudioSource.volume = this.volume;
+            effectAudioSource.loop = false;
+            effectAudioSource.playOnAwake = false;
+            this.effectSources.push(effectAudioSource);
         }
+
+        this.bgmSource = this.addComponent(AudioSource);
+        this.bgmSource.volume = this.volume;
+        this.bgmSource.loop = true;        
+        this.bgmSource.playOnAwake = true;
     }
 
     public play(soundType: sndType) {
@@ -70,14 +79,6 @@ export class SoundManager extends Component {
         }
     }
 
-    public setVolume() {
-        for (const source of this.effectSources) {
-            if (source.playing) {
-                source.volume = this.volume;
-            }
-        }
-    }
-
     private playEffect(soundType: sndType) {
         const clip = this.soundMap.get(soundType);
         if (!clip) return;
@@ -90,6 +91,27 @@ export class SoundManager extends Component {
             sourceToPlay.play();
         }
     }
+
+    public playBGM() {
+        const clip = this.soundMap.get(sndType.casino_ambiance);
+        if (!clip) return;
+
+        this.bgmSource.clip = clip;
+        this.bgmSource.volume = this.volume;
+        this.bgmSource.play();
+    }
+
+    public setVolume() {
+        for (const source of this.effectSources) {
+            if (source.playing) {
+                source.volume = this.volume;
+            }
+        }
+
+        this.bgmSource.volume = this.volume;
+    }
+
+
 }
 
 

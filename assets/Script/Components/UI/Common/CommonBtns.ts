@@ -148,6 +148,7 @@ export class CommonBtns extends Component {
     }
 
     public setStreamingToggle(is: boolean) {
+        if (this.liveToggle.isChecked === is) return;
         this.liveToggle.isChecked = is;
     }
 
@@ -159,10 +160,11 @@ export class CommonBtns extends Component {
     }
 
     public setHelpToggle(is: boolean) {
+        if (this.helpToggle.isChecked === is) return;
         this.helpToggle.isChecked = is;
     }
 
-    private clickVolume() {        
+    private clickVolume() {
         this.setVolume();
     }
 
@@ -373,7 +375,7 @@ export class CommonBtns extends Component {
         this.undoBtn.interactable = true;
     }
 
-    public hideChipBtns() {
+    private hideChipBtns() {
         this.chipBtnNodes.forEach(c => {
             c.active = false;
         });
@@ -381,7 +383,7 @@ export class CommonBtns extends Component {
         this.chipOverSprNode.active = false;
     }
 
-    public showChipBtns() {
+    private showChipBtns() {
         this.chipBtnNodes.forEach(c => {
             c.active = true;
         });

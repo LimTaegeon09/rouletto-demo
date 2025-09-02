@@ -179,25 +179,6 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../Design/06_Effect/01_youwin/youwin_0.png</key>
-            <key type="filename">../../../../../../Design/06_Effect/01_youwin/youwin_1.png</key>
-            <key type="filename">../../../../../../Design/06_Effect/01_youwin/youwin_2.png</key>
-            <key type="filename">../../../../../../Design/06_Effect/01_youwin/youwin_3.png</key>
-            <key type="filename">../../../../../../Design/06_Effect/01_youwin/youwin_4.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>108,24,216,47</rect>
-                <key>scale9Paddings</key>
-                <rect>108,24,216,47</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">../../../../../../Design/06_Effect/02_nomorebets/Messge_NMB.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -243,7 +224,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../../../../Design/06_Effect/04_nextgame/Messge_NGS.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/06_history/light_historoy.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -252,9 +233,56 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>400,33,799,65</rect>
+                <rect>52,12,104,25</rect>
                 <key>scale9Paddings</key>
-                <rect>400,33,799,65</rect>
+                <rect>52,12,104,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_1.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_2.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_3.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_4.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_5.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_6.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_7.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_8.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/07_count/num_9.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>11,13,22,25</rect>
+                <key>scale9Paddings</key>
+                <rect>11,13,22,25</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_0.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_1.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_2.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_3.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_4.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_5.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_6.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_7.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_8.png</key>
+            <key type="filename">../../../../../../Design/06_Effect/08_congratulations/con_9.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>80,8,161,15</rect>
+                <key>scale9Paddings</key>
+                <rect>80,8,161,15</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -265,15 +293,29 @@
             <struct type="SpriteSheet">
                 <key>files</key>
                 <array>
-                    <filename>../../../../../../Design/06_Effect/01_youwin/youwin_0.png</filename>
-                    <filename>../../../../../../Design/06_Effect/01_youwin/youwin_1.png</filename>
-                    <filename>../../../../../../Design/06_Effect/01_youwin/youwin_2.png</filename>
-                    <filename>../../../../../../Design/06_Effect/01_youwin/youwin_3.png</filename>
-                    <filename>../../../../../../Design/06_Effect/01_youwin/youwin_4.png</filename>
                     <filename>../../../../../../Design/06_Effect/02_nomorebets/Messge_NMB.png</filename>
                     <filename>../../../../../../Design/06_Effect/02_nomorebets/eff_bg_black.png</filename>
                     <filename>../../../../../../Design/06_Effect/03_placeyourbets/Messge_PYB.png</filename>
-                    <filename>../../../../../../Design/06_Effect/04_nextgame/Messge_NGS.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_1.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_2.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_3.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_4.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_5.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_6.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_7.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_8.png</filename>
+                    <filename>../../../../../../Design/06_Effect/07_count/num_9.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_0.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_1.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_2.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_3.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_4.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_5.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_6.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_7.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_8.png</filename>
+                    <filename>../../../../../../Design/06_Effect/08_congratulations/con_9.png</filename>
+                    <filename>../../../../../../Design/06_Effect/06_history/light_historoy.png</filename>
                 </array>
             </struct>
         </map>

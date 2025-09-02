@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, Sprite } from 'cc';
+import { _decorator, Component, Label, Node, Sprite, tween, Tween, UIOpacity } from 'cc';
 import { RED_NUMBERS } from 'db://assets/Script/Configs/Config';
 import { sortNumbersAscending } from 'db://assets/Script/Utils/Utils';
 const { ccclass, property } = _decorator;
@@ -6,9 +6,16 @@ const { ccclass, property } = _decorator;
 @ccclass('HistoryTop')
 export class HistoryTop extends Component {
     private resultNodes: Array<Node> = [];
+    private lightOpacity: UIOpacity = null;
+    private lightTween: Tween<UIOpacity> = null;
 
     protected onLoad(): void {
         this.resultNodes = this.node.getChildByName('Results').children
+        this.lightOpacity = this.node.getChildByName('LightSpr').getComponent(UIOpacity);
+    }
+
+    protected start(): void {
+ 
     }
 
     public setResults(numbers: Array<any>) {
@@ -57,6 +64,23 @@ export class HistoryTop extends Component {
         }
 
         return spriteFileName;
+    }
+
+    public lightOn() {
+        if (this.lightTween) this.lightTween.stop();
+
+        const sequence = tween()
+            .set({ opacity: 255 })
+            .to(0.6, { opacity: 255 * 0.6 });
+
+        this.lightTween = tween(this.lightOpacity)
+            .repeatForever(sequence)
+            .start();
+    }
+
+    public lightOff() {
+        if (this.lightTween) this.lightTween.stop();
+        this.lightOpacity.opacity = 0;
     }
 }
 

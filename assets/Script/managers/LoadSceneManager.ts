@@ -1,4 +1,4 @@
-import { _decorator, AudioClip, Component, director, Font, resources, screen, setDisplayStats, SpriteAtlas } from 'cc';
+import { _decorator, AudioClip, Component, director, find, Font, resources, screen, setDisplayStats, SpriteAtlas, tween, UIOpacity } from 'cc';
 import { PREVIEW } from 'cc/env';
 import { Assets } from '../Configs/Assets';
 import { Console, moneyConfig } from '../Configs/Config';
@@ -6,7 +6,7 @@ import { ConfigManager } from '../Configs/ConfigManager';
 import { GameConstants } from '../Configs/GameConstants';
 import { WebSocketClient } from '../Network/WebSocketClient';
 import { WebSocketMsg } from '../Network/WebSocketMsg';
-import { SoundManager } from './SoundManager';
+import { sndType, SoundManager } from './SoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('LoadSceneManager')
@@ -14,22 +14,27 @@ export class LoadSceneManager extends Component {
 
     private isLoaded: boolean = false;
 
-    private readonly imageCnt: number = 9;
+    private readonly imageCnt: number = 11;
     private readonly fontCnt: number = 11;
     private readonly sceneCnt: number = 1;
     private readonly wsCnt: number = 1;
-    private readonly sndCnt: number = 21;
+    private readonly sndCnt: number = Object.keys(sndType).length;
+    private readonly loadingAnimCnt: number = 1;
 
-    private readonly totalCnt: number = this.imageCnt + this.fontCnt + this.sceneCnt + this.wsCnt + this.sndCnt;
-
+    private readonly totalCnt: number = this.imageCnt + this.fontCnt + this.sceneCnt + this.wsCnt + this.sndCnt + this.loadingAnimCnt;
     private loadedCnt: number = 0;
+
+    private blackOpacity: UIOpacity = null;
 
     onLoad() {
         setDisplayStats(false);
+
+        this.blackOpacity = find('Canvas/UI/BlackSpr').getComponent(UIOpacity);
     }
 
     start() {
         this.initialize();
+        this.startLoadingAnim();
     }
 
     update(deltaTime: number) {
@@ -148,6 +153,14 @@ export class LoadSceneManager extends Component {
             Assets.instance.effectAtlas = atlas;
             this.loadedCnt++;
         });
+        resources.load('image/06_Effect/ngs0', SpriteAtlas, (err, atlas) => {
+            Assets.instance.ngsAtlas0 = atlas;
+            this.loadedCnt++;
+        });
+        resources.load('image/06_Effect/ngs1', SpriteAtlas, (err, atlas) => {
+            Assets.instance.ngsAtlas1 = atlas;
+            this.loadedCnt++;
+        });
 
         /*****************************************************************
         Fonts
@@ -191,6 +204,17 @@ export class LoadSceneManager extends Component {
         director.loadScene("GameScene", () => {
             Console.css("%cMove scene", 'color: #000000; background: #FFD700; font-weight: bold;');
         });
+    }
+
+    private startLoadingAnim() {
+        const loadingTween = tween(this.blackOpacity)
+            .to(1, { opacity: 0 })
+            .delay(2)
+            .to(1, { opacity: 255 })
+            .call(() => {
+                this.loadedCnt++;
+            })
+            .start();
     }
 }
 

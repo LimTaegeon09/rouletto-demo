@@ -5,6 +5,7 @@ import { Console, isPlayableForPREVIEW } from '../Configs/Config';
 import { GameConstants } from '../Configs/GameConstants';
 import { WebSocketClient } from '../Network/WebSocketClient';
 import { WebSocketMsg } from '../Network/WebSocketMsg';
+import { SoundManager } from './SoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameSceneManager')
@@ -31,7 +32,7 @@ export class GameSceneManager extends Component {
     }
 
     protected start(): void {
-
+        SoundManager.instance.playBGM();
     }
 
     private audioEnable(event, customEventData) {
@@ -66,15 +67,19 @@ export class GameSceneManager extends Component {
         WebSocketClient.type = data['type'];
         WebSocketClient.data = data['data'];
 
-        if (WebSocketClient.checkMsgType(WebSocketMsg.gameStart)) {
+        if (WebSocketClient.checkMsgData(WebSocketMsg.gameStart)) {
             this.uiManager.gameStart();
         }
 
-        else if (WebSocketClient.checkMsgType(WebSocketMsg.bettingEnd)) {
+        else if (WebSocketClient.checkMsgData(WebSocketMsg.bettingEnd)) {
             this.uiManager.bettingEnd();
         }
 
-        else if (WebSocketClient.checkMsgType(WebSocketMsg.spinBall)) {
+        else if (WebSocketClient.checkMsgData(WebSocketMsg.spinReady)) {
+            this.uiManager.spinReady();
+        }
+
+        else if (WebSocketClient.checkMsgData(WebSocketMsg.spinBall)) {
             this.uiManager.spinBall();
         }
 
@@ -82,11 +87,11 @@ export class GameSceneManager extends Component {
             this.uiManager.ballResults(data['data']);
         }
 
-        else if (WebSocketClient.checkMsgType(WebSocketMsg.numberConfirm)) {
+        else if (WebSocketClient.checkMsgData(WebSocketMsg.numberConfirm)) {
             this.uiManager.numberConfirm();
         }
 
-        else if (WebSocketClient.checkMsgType(WebSocketMsg.gameEnd)) {
+        else if (WebSocketClient.checkMsgData(WebSocketMsg.gameEnd)) {
             this.uiManager.gameEnd();
         }
 

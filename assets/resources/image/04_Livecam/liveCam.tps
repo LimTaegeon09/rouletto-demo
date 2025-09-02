@@ -179,21 +179,6 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../../Design/04_Livecam/area_sample.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>348,196,696,391</rect>
-                <key>scale9Paddings</key>
-                <rect>348,196,696,391</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">../../../../../../Design/04_Livecam/line_livecam_40.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -216,7 +201,6 @@
             <struct type="SpriteSheet">
                 <key>files</key>
                 <array>
-                    <filename>../../../../../../Design/04_Livecam/area_sample.png</filename>
                     <filename>../../../../../../Design/04_Livecam/line_livecam_40.png</filename>
                 </array>
             </struct>

@@ -54,6 +54,10 @@ export class WebSocketClient extends WebSocket {
         return (WebSocketClient.type === msg['type']);
     }
 
+    public static checkMsgData(msg: any) {
+        return (WebSocketClient.data === msg['data']);
+    }
+
     public static checkMsg(msg: any) {
         return (WebSocketClient.type === msg['type'] && WebSocketClient.data === msg['data']);
     }
