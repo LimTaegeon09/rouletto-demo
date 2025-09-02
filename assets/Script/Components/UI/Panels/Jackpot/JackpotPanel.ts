@@ -27,6 +27,10 @@ export class JackpotPanel extends Component {
         EventManager.instance.node.on(evtNode.jackpotPanel, this.evtJackpotPanel, this);
     }
 
+    protected start(): void {
+        this.setPanelActive(false);
+    }
+
     private evtJackpotPanel(args: any[]) {
         switch (args[0]) {
             case evtFunc.addPageRecord:

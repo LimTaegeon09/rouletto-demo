@@ -34,6 +34,8 @@ export class FourSumPanel extends Component {
 
     start() {
         this.minMaxLabel.string = 'MIN : $' + formatNumber(GameConstants.MIN_BET_FOURSUM) + '   MAX : $' + formatNumber(GameConstants.MAX_BET_FOURSUM);
+
+        this.setPanelActive(false);
     }
 
     private clickPanel(event, customEventData) {
