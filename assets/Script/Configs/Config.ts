@@ -44,6 +44,40 @@ export enum volumeState {
     high
 };
 
+interface currencyInfo {
+    symbol: string,
+    bmFont: string,
+    code: string
+}
+
+export const currency: Record<string, currencyInfo> = {
+    Cent: {
+        symbol: '¢',
+        bmFont: 'C',
+        code: 'Cent'
+    },
+    CNY: {
+        symbol: '¥',
+        bmFont: 'Y',
+        code: 'CNY'
+    },
+    KRW: {
+        symbol: '₩',
+        bmFont: 'W',
+        code: 'KRW'
+    },
+    PHP: {
+        symbol: '₱',
+        bmFont: 'P',
+        code: 'PHP'
+    },
+    USD: {
+        symbol: '$',
+        bmFont: 'S',
+        code: 'USD'
+    }
+}
+
 //!-------------------------------------------------------------
 
 export var gameConfig = {
@@ -53,7 +87,8 @@ export var gameConfig = {
     denom: 1,
     currentBet: 1,
     isAutoReBet: false,
-    isJackpotWin: false
+    isJackpotWin: false,
+    currency: currency.USD
 };
 
 export var moneyConfig = {

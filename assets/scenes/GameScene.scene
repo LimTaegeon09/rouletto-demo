@@ -132425,7 +132425,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 959.5,
-      "y": -990.5,
+      "y": -984.5,
       "z": 0
     },
     "_lrot": {
@@ -132537,7 +132537,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 959,
-      "y": -1036,
+      "y": -1039,
       "z": 0
     },
     "_lrot": {
@@ -132595,10 +132595,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_customMaterial": {
-      "__uuid__": "eb88a5f6-5e62-43e7-8305-d49dca0aaad1",
-      "__expectedType__": "cc.Material"
-    },
+    "_customMaterial": null,
     "_srcBlendFactor": 2,
     "_dstBlendFactor": 4,
     "_color": {
@@ -132608,18 +132605,18 @@
       "b": 255,
       "a": 255
     },
-    "_string": "$999,999,999.00",
+    "_string": "S999,999,999.00",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 60,
-    "_fontSize": 60,
+    "_actualFontSize": 74,
+    "_fontSize": 74,
     "_fontFamily": "Arial",
-    "_lineHeight": 40,
+    "_lineHeight": 74,
     "_overflow": 2,
     "_enableWrapText": false,
     "_font": {
-      "__uuid__": "68b74efe-7005-4f81-9aec-d1b05017a11a",
-      "__expectedType__": "cc.TTFFont"
+      "__uuid__": "8d8f5a24-dde5-4597-87e4-70d6f2ab3299",
+      "__expectedType__": "cc.BitmapFont"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,

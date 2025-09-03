@@ -1,5 +1,6 @@
 import { _decorator, Component, Label, Node, Sprite, tween, Tween, UIOpacity } from 'cc';
 import { RED_NUMBERS } from 'db://assets/Script/Configs/Config';
+import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
 import { sortNumbersAscending } from 'db://assets/Script/Utils/Utils';
 const { ccclass, property } = _decorator;
 
@@ -15,7 +16,7 @@ export class HistoryTop extends Component {
     }
 
     protected start(): void {
- 
+        this.lightOn();
     }
 
     public setResults(numbers: Array<any>) {
@@ -66,19 +67,19 @@ export class HistoryTop extends Component {
         return spriteFileName;
     }
 
-    public lightOn() {
+    private lightOn() {
         if (this.lightTween) this.lightTween.stop();
 
         const sequence = tween()
-            .set({ opacity: 255 })
-            .to(0.6, { opacity: 255 * 0.6 });
+            .set({ opacity: 255 * 0.8 })
+            .to(GameConstants.HISTORY_BLINK_DURATION, { opacity: 0 });
 
         this.lightTween = tween(this.lightOpacity)
             .repeatForever(sequence)
             .start();
     }
 
-    public lightOff() {
+    private lightOff() {
         if (this.lightTween) this.lightTween.stop();
         this.lightOpacity.opacity = 0;
     }

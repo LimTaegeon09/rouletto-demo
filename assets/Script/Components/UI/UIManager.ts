@@ -323,8 +323,6 @@ export class UIManager extends Component {
 
         this.presentationManager.startNGS();
         this.presentationManager.endTotalWin();
-
-        this.historyManager.lightOff();
     }
 
     public gameErr() {

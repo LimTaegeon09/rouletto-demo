@@ -1,5 +1,6 @@
 import { _decorator, Color, Component, Graphics, Label, Node, Size, Sprite, SpriteFrame, Tween, tween, UIOpacity, v3, Vec3, view } from 'cc';
 import { Assets } from '../../../Configs/Assets';
+import { gameConfig } from '../../../Configs/Config';
 import { formatCurrency } from '../../../Utils/Utils';
 import { evtNode } from '../../EventManager';
 const { ccclass, property } = _decorator;
@@ -75,8 +76,7 @@ export class PresentationManager extends Component {
         }
         this.ngsSequence.delay(0.5);
 
-        ////////////////////////////////////////////////////////////
-
+        ////////////////////////////////////////////////////////////       
     }
 
     public startNMB() {
@@ -222,7 +222,7 @@ export class PresentationManager extends Component {
             .repeatForever(sequence)
             .start();
 
-        totalWinLabel.string = '$ ' + formatCurrency(totalWin, 1);
+        totalWinLabel.string = gameConfig.currency.bmFont + formatCurrency(totalWin, 2);
     }
 
     public endTotalWin() {

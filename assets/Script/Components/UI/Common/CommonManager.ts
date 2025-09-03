@@ -1,5 +1,5 @@
 import { _decorator, Component, Label, Sprite } from 'cc';
-import { moneyConfig } from '../../../Configs/Config';
+import { gameConfig, moneyConfig } from '../../../Configs/Config';
 import { GameConstants } from '../../../Configs/GameConstants';
 import { formatCurrency, formatNumber } from '../../../Utils/Utils';
 const { ccclass, property } = _decorator;
@@ -65,43 +65,43 @@ export class CommonManager extends Component {
 
     private initBasicBet() {
         moneyConfig.basicBet = 0;
-        this.basicBetLabel.string = '$' + formatNumber(moneyConfig.basicBet);
+        this.setBasicBetLabel();
     }
 
     private initFourSumBet() {
         moneyConfig.fourSumBet = 0;
-        this.fourSumBetLabel.string = '$' + formatNumber(moneyConfig.fourSumBet);
+        this.setFourSumBetLabel();
     }
 
     private initJackpotBet() {
         moneyConfig.jackpotBet = 0;
-        this.jackpotBetLabel.string = '$' + formatNumber(moneyConfig.jackpotBet);
+        this.setJackpotBetLabel();
     }
 
     public initJackpotWin() {
         moneyConfig.jackpotWin = GameConstants.MIN_PRIZE_JACKPOT;
-        this.jackpotWinLabel.string = 'USD\n' + formatCurrency(moneyConfig.jackpotWin, 1);
+        this.setJackpotWinLabel();
     }
 
     private initCredit() {
-        this.creditLabel.string = 'USD ' + formatCurrency(moneyConfig.credit, 1);
+        this.setCreditLabel();
     }
 
     public initWin() {
         moneyConfig.win = 0;
-        this.winLabel.string = '$ ' + formatCurrency(moneyConfig.win, 1);
+        this.setWinLabel();
     }
 
     public initBet() {
         moneyConfig.bet = 0;
-        this.betLabel.string = '$ ' + formatNumber(moneyConfig.bet);
+        this.setBetLabel();
     }
 
     /////////////////////////////////////////
 
     public addBasicBet(bet: number) {
         moneyConfig.basicBet += bet;
-        this.basicBetLabel.string = '$' + formatNumber(moneyConfig.basicBet);
+        this.setBasicBetLabel();
 
         this.addBet(bet);
         this.subCredit(bet);
@@ -109,7 +109,7 @@ export class CommonManager extends Component {
 
     public addFourSumBet(bet: number) {
         moneyConfig.fourSumBet += bet;
-        this.fourSumBetLabel.string = '$' + formatNumber(moneyConfig.fourSumBet);
+        this.setFourSumBetLabel();
 
         this.addBet(bet);
         this.subCredit(bet);
@@ -117,7 +117,7 @@ export class CommonManager extends Component {
 
     public addJackpotBet() {
         moneyConfig.jackpotBet += GameConstants.MIN_BET_JACKPOT;
-        this.jackpotBetLabel.string = '$' + formatNumber(moneyConfig.jackpotBet);
+        this.setJackpotBetLabel();
 
         this.addBet(GameConstants.MIN_BET_JACKPOT);
         this.subCredit(GameConstants.MIN_BET_JACKPOT);
@@ -125,29 +125,29 @@ export class CommonManager extends Component {
 
     public addJackpotWin(bet: number) {
         moneyConfig.jackpotWin += bet;
-        this.jackpotWinLabel.string = 'USD\n' + formatCurrency(moneyConfig.jackpotWin, 1);
+        this.setJackpotWinLabel();
     }
 
     private addCredit(bet: number) {
         moneyConfig.credit += bet;
-        this.creditLabel.string = 'USD ' + formatCurrency(moneyConfig.credit, 1);
+        this.setCreditLabel();
     }
 
     public addWin(bet: number) {
         moneyConfig.win += bet;
-        this.winLabel.string = '$ ' + formatCurrency(moneyConfig.win, 1);
+        this.setWinLabel();
     }
 
     private addBet(bet: number) {
         moneyConfig.bet += bet;
-        this.betLabel.string = '$ ' + formatNumber(moneyConfig.bet);
+        this.setBetLabel();
     }
 
     /////////////////////////////////////////
 
     public subBasicBet(bet: number) {
         moneyConfig.basicBet -= bet;
-        this.basicBetLabel.string = '$' + formatNumber(moneyConfig.basicBet);
+        this.setBasicBetLabel();
 
         this.subBet(bet);
         this.addCredit(bet);
@@ -155,7 +155,7 @@ export class CommonManager extends Component {
 
     public subFourSumBet(bet: number) {
         moneyConfig.fourSumBet -= bet;
-        this.fourSumBetLabel.string = '$' + formatNumber(moneyConfig.fourSumBet);
+        this.setFourSumBetLabel();
 
         this.subBet(bet);
         this.addCredit(bet);
@@ -163,7 +163,7 @@ export class CommonManager extends Component {
 
     public subJackpotBet() {
         moneyConfig.jackpotBet -= GameConstants.MIN_BET_JACKPOT;
-        this.jackpotBetLabel.string = '$' + formatNumber(moneyConfig.jackpotBet);
+        this.setJackpotBetLabel();
 
         this.subBet(GameConstants.MIN_BET_JACKPOT);
         this.addCredit(GameConstants.MIN_BET_JACKPOT);
@@ -171,12 +171,42 @@ export class CommonManager extends Component {
 
     private subCredit(bet: number) {
         moneyConfig.credit -= bet;
-        this.creditLabel.string = 'USD ' + formatCurrency(moneyConfig.credit, 1);
+        this.setCreditLabel();
     }
 
     private subBet(bet: number) {
         moneyConfig.bet -= bet;
-        this.betLabel.string = '$ ' + formatNumber(moneyConfig.bet);
+        this.setBetLabel();
+    }
+
+    /////////////////////////////////////////
+
+    private setBasicBetLabel() {
+        this.basicBetLabel.string = gameConfig.currency.symbol + formatNumber(moneyConfig.basicBet);
+    }
+
+    private setFourSumBetLabel() {
+        this.fourSumBetLabel.string = gameConfig.currency.symbol + formatNumber(moneyConfig.fourSumBet);
+    }
+
+    private setJackpotBetLabel() {
+        this.jackpotBetLabel.string = gameConfig.currency.symbol + formatNumber(moneyConfig.jackpotBet);
+    }
+
+    private setJackpotWinLabel() {
+        this.jackpotWinLabel.string = gameConfig.currency.code + '\n' + formatCurrency(moneyConfig.jackpotWin, 1);
+    }
+
+    private setCreditLabel() {
+        this.creditLabel.string = gameConfig.currency.symbol + ' ' + formatCurrency(moneyConfig.credit, 2);
+    }
+
+    private setWinLabel() {
+        this.winLabel.string = gameConfig.currency.symbol + ' ' + formatCurrency(moneyConfig.win, 2);
+    }
+
+    private setBetLabel() {
+        this.betLabel.string = gameConfig.currency.symbol + ' ' + formatCurrency(moneyConfig.bet, 2);
     }
 
     /////////////////////////////////////////
