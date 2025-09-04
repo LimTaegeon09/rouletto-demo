@@ -85,7 +85,7 @@ export class BasicPrizeCalculator extends Component {
             if (c.getChildByName('Sprite').active) {
                 myBets.push({
                     type: BetType.Column,
-                    numbers: [...COLUMN_NUMBERS[i]],
+                    numbers: Array.from(COLUMN_NUMBERS[i]),
                     amount: parseNumber(c.getChildByName('Label').getComponent(Label).string)
                 });
             }
@@ -95,7 +95,7 @@ export class BasicPrizeCalculator extends Component {
             if (c.getChildByName('Sprite').active) {
                 myBets.push({
                     type: BetType.Dozen,
-                    numbers: [...DOZEN_NUMBERS[i]],
+                    numbers: Array.from(DOZEN_NUMBERS[i]),
                     amount: parseNumber(c.getChildByName('Label').getComponent(Label).string)
                 });
             }
