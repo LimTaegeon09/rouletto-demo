@@ -163,14 +163,14 @@ export class BasicPrizeCalculator extends Component {
 
             const hits = bet.numbers.filter(num => winningNumbers.includes(num)).length;
 
-            console.log(bet.type);
-
-            console.log({
-                checkHits: hits,
-                checkBetType: bet.type,
-                checkEnumColor: BetType.Color, // 빌드 시 undefined일 확률 높음
-                checkEnumSpecial: BetType.SpecialStraight, // 빌드 시 undefined일 확률 높음
+            console.log('Before filter:', {
+                betNumbers: bet.numbers,
+                winningNumbers: winningNumbers,
+                winningNumbersLength: winningNumbers.length
             });
+
+            console.log(hits);
+            console.log(bet.type);
 
             if (hits === 0 && bet.type !== BetType.Color && bet.type !== BetType.SpecialStraight) continue;
 
