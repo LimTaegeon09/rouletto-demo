@@ -1,4 +1,3 @@
-import { PREVIEW } from "cc/env";
 import { Console } from "../Configs/Config";
 import { GameConstants } from "../Configs/GameConstants";
 
@@ -18,7 +17,6 @@ export class WebSocketClient extends WebSocket {
         return new Promise<void>((resolve, reject) => {
             try {
                 if (this._instance) { this.close(); }
-                if (PREVIEW) { }
                 this._instance = new this(GameConstants.WEBSOCKET_URL);
                 Console.css("%cWebSocket Open", "color: #000000; background: #FFFFFF; font-weight: bold;", GameConstants.WEBSOCKET_URL);
                 resolve();

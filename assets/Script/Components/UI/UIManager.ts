@@ -77,6 +77,8 @@ export class UIManager extends Component {
     }
 
     protected start(): void {
+        this.bettingBtnsUnlock();
+        return; //
         if (PREVIEW && !isPlayableForPREVIEW) {
             this.bettingBtnsUnlock(); // Unlock 함으로써 버튼 테스트
         }

@@ -60,6 +60,7 @@ export class GameSceneManager extends Component {
     }
 
     private receiveCallback(data: any) {
+        return; //
         if (PREVIEW && !isPlayableForPREVIEW) return;
 
         Console.css("%cReceived data", 'color: #000000; background: #B8E7B8; font-weight: bold;', data);
