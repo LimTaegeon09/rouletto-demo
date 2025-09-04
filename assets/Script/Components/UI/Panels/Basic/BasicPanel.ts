@@ -197,7 +197,7 @@ export class BasicPanel extends Component {
         else if (numbers.every(num => SPECIAL_HIGH_NUMBERS.has(num))) {
             this.winNode.special[3].active = true;
         }
-        const sorted = [...numbers].sort((a, b) => a - b);
+        const sorted = Array.from(numbers).sort((a, b) => a - b);
         const isConsecutive1 = sorted[1] === sorted[0] + 1;
         const isConsecutive2 = sorted[2] === sorted[1] + 1;
         const isConsecutive3 = sorted[3] === sorted[2] + 1;

@@ -188,7 +188,7 @@ export class JackpotPage extends Component {
     public loadBettingHistory(betNumbers: number[]) {
         this.clearPage(false);
 
-        this.numbers = [...betNumbers];
+        this.numbers = Array.from(betNumbers);
 
         this.numbers.forEach(number => {
             this.numNodes[number].getComponent(Sprite).enabled = true;

@@ -1,6 +1,5 @@
 import { Component, js, Label, Node, UITransform } from 'cc';
 import { BLACK_NUMBERS, COLOR_COMBINATIONS, Console, RED_NUMBERS } from '../Configs/Config';
-import { EventManager } from '../Components/EventManager';
 
 export function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -65,7 +64,7 @@ export function pickRandomNumbers(): number[] {
 }
 
 export function sortNumbersAscending(numbers: number[]): number[] {
-    return [...numbers].sort((a, b) => a - b);
+    return Array.from(numbers).sort((a, b) => a - b);
 }
 
 export function getRandomNumber(max: number): number {

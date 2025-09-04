@@ -116,7 +116,7 @@ export class BasicPrizeCalculator extends Component {
         if (specialLowNode.getChildByName('Sprite').active) {
             myBets.push({
                 type: BetType.SpecialLow,
-                numbers: [...SPECIAL_LOW_NUMBERS],
+                numbers: Array.from(SPECIAL_LOW_NUMBERS),
                 amount: parseNumber(specialLowNode.getChildByName('Label').getComponent(Label).string)
             });
         }
@@ -145,7 +145,7 @@ export class BasicPrizeCalculator extends Component {
         if (specialHighNode.getChildByName('Sprite').active) {
             myBets.push({
                 type: BetType.SpecialHigh,
-                numbers: [...SPECIAL_HIGH_NUMBERS],
+                numbers: Array.from(SPECIAL_HIGH_NUMBERS),
                 amount: parseNumber(specialHighNode.getChildByName('Label').getComponent(Label).string)
             });
         }
@@ -154,30 +154,16 @@ export class BasicPrizeCalculator extends Component {
     }
 
     private calculateWinnings(bets: Bet[], winningNumbers: number[]): number {
-
-        console.log(bets);
-
         let totalWinnings = 0;
 
         for (const bet of bets) {
 
             const hits = bet.numbers.filter(num => winningNumbers.includes(num)).length;
 
-            console.log('Before filter:', {
-                betNumbers: bet.numbers,
-                winningNumbers: winningNumbers,
-                winningNumbersLength: winningNumbers.length
-            });
-
-            console.log(hits);
-            console.log(bet.type);
-
             if (hits === 0 && bet.type !== BetType.Color && bet.type !== BetType.SpecialStraight) continue;
 
             const amount = bet.amount;
             let payKey = '';
-
-            console.log('if문 통과했다!');
 
             switch (bet.type) {
                 case BetType.StraightUp:
@@ -193,7 +179,7 @@ export class BasicPrizeCalculator extends Component {
 
                 case BetType.SpecialStraight:
                     payKey = `${bet.specialStraight}Hits`;
-                    const sorted = [...winningNumbers].sort((a, b) => a - b);
+                    const sorted = Array.from(winningNumbers).sort((a, b) => a - b);
                     const isConsecutive1 = sorted[1] === sorted[0] + 1;
                     const isConsecutive2 = sorted[2] === sorted[1] + 1;
                     const isConsecutive3 = sorted[3] === sorted[2] + 1;
@@ -212,15 +198,7 @@ export class BasicPrizeCalculator extends Component {
                 default:
                     payKey = hits === 1 ? '1Hit' : `${hits}Hits`;
 
-                    console.log(payKey);
-
-                    console.log(PayoutTable.Basic[bet.type][payKey]);
-
                     if (PayoutTable.Basic[bet.type][payKey]) {
-
-                        console.log(PayoutTable.Basic[bet.type][payKey].pays, amount);
-
-
                         totalWinnings += amount * PayoutTable.Basic[bet.type][payKey].pays + amount;
                     }
                     break;

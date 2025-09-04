@@ -88,7 +88,7 @@ export class JackpotPanel extends Component {
     }
 
     public saveBettingHistory() {
-        this.previousPageRecord = [...this.currentPageRecord];
+        this.previousPageRecord = Array.from(this.currentPageRecord);
     }
 
     public loadBettingHistory() {

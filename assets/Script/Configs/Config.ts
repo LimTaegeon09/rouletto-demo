@@ -1,3 +1,22 @@
+/**
+ * Set을 배열로 변환합니다.
+ *
+ * 전개 연산자 '[...set]' 대신 'Array.from(set)'을 사용합니다.
+ *
+ * 이유:
+ * Cocos Creator로 웹/모바일 빌드를 할 때, 코드는 호환성을 위해 구형 JavaScript로 변환(트랜스파일)됩니다.
+ * 이때 '[...set]' 문법이 일부 환경에서 의도와 다르게 동작하여,
+ * 숫자 배열 [1, 2, 3]이 아닌, Set 객체 하나를 담은 배열 [ Set{1, 2, 3} ] 형태로 변환되는
+ * 문제가 발생할 수 있습니다.
+ *
+ * 'Array.from()'은 이러한 트랜스파일 과정에서 문제가 발생할 확률이 훨씬 적어 더 안정적입니다.
+ */
+const mySet = new Set([10, 20, 30]);
+const newArray = Array.from(mySet); // 안정적인 방법
+// const newArray = [...mySet]; // 빌드 시 잠재적 문제 발생 가능
+
+//!-------------------------------------------------------------
+
 import { Node } from 'cc';
 import { PayoutTable } from './PayoutTable';
 

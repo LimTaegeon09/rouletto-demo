@@ -11,11 +11,11 @@ export class JackpotPrizeCalculator extends Component {
     private readonly pageCnt: number = 5;
 
     public calculate(winningNumbers: number[], betNumbers: number[]) {
-        const sortedBetNumbers = [...betNumbers].sort((a, b) => a - b);
+        const sortedBetNumbers = Array.from(betNumbers).sort((a, b) => a - b);
         this.betNumbersArr.push(sortedBetNumbers);
 
         if (this.betNumbersArr.length === this.pageCnt) {
-            const sortedWinningNumbers = [...winningNumbers].sort((a, b) => a - b);
+            const sortedWinningNumbers = Array.from(winningNumbers).sort((a, b) => a - b);
             const winMoney = this.calculateWinnings(sortedWinningNumbers, this.betNumbersArr);
 
             Console.css("%cJackpot Prize", "color: #000000; background: #CC9999; font-weight: bold;", winMoney);
