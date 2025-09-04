@@ -154,6 +154,9 @@ export class BasicPrizeCalculator extends Component {
     }
 
     private calculateWinnings(bets: Bet[], winningNumbers: number[]): number {
+
+        console.log(bets);
+
         let totalWinnings = 0;
 
         for (const bet of bets) {
@@ -164,6 +167,8 @@ export class BasicPrizeCalculator extends Component {
 
             const amount = bet.amount;
             let payKey = '';
+
+            console.log(bet.type);
 
             switch (bet.type) {
                 case BetType.StraightUp:
@@ -197,7 +202,16 @@ export class BasicPrizeCalculator extends Component {
 
                 default:
                     payKey = hits === 1 ? '1Hit' : `${hits}Hits`;
+
+                    console.log(payKey);
+
+                    console.log(PayoutTable.Basic[bet.type][payKey]);
+
                     if (PayoutTable.Basic[bet.type][payKey]) {
+
+                        console.log(PayoutTable.Basic[bet.type][payKey].pays, amount);
+                        
+
                         totalWinnings += amount * PayoutTable.Basic[bet.type][payKey].pays + amount;
                     }
                     break;
