@@ -20,7 +20,7 @@ const newArray = Array.from(mySet); // 안정적인 방법
 import { Node } from 'cc';
 import { PayoutTable } from './PayoutTable';
 
-export const isPlayableForPREVIEW: boolean = false; // for Test
+export const isPlayableForPREVIEW: boolean = true; // for Test
 
 export const RED_NUMBERS = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]);
 export const BLACK_NUMBERS = new Set([2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]);

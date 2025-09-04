@@ -220,7 +220,7 @@ export class CommonBtns extends Component {
 
 
         //!----- for Test -----!//
-        
+        /*
         if (isChecked) {
             const ran = pickRandomNumbers();
             emitUIManager(evtFunc.ballResults, [1,2,3,36]);
@@ -228,7 +228,7 @@ export class CommonBtns extends Component {
         else {
             emitUIManager(evtFunc.gameEnd);
         }
-        
+        */
         //!--------------------!//
     }
 
