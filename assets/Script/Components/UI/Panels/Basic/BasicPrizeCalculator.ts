@@ -163,12 +163,21 @@ export class BasicPrizeCalculator extends Component {
 
             const hits = bet.numbers.filter(num => winningNumbers.includes(num)).length;
 
+            console.log(bet.type);
+
+            console.log({
+                checkHits: hits,
+                checkBetType: bet.type,
+                checkEnumColor: BetType.Color, // 빌드 시 undefined일 확률 높음
+                checkEnumSpecial: BetType.SpecialStraight, // 빌드 시 undefined일 확률 높음
+            });
+
             if (hits === 0 && bet.type !== BetType.Color && bet.type !== BetType.SpecialStraight) continue;
 
             const amount = bet.amount;
             let payKey = '';
 
-            console.log(bet.type);
+            console.log('if문 통과했다!');
 
             switch (bet.type) {
                 case BetType.StraightUp:
@@ -210,7 +219,7 @@ export class BasicPrizeCalculator extends Component {
                     if (PayoutTable.Basic[bet.type][payKey]) {
 
                         console.log(PayoutTable.Basic[bet.type][payKey].pays, amount);
-                        
+
 
                         totalWinnings += amount * PayoutTable.Basic[bet.type][payKey].pays + amount;
                     }
