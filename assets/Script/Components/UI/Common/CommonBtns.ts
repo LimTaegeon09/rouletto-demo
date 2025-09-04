@@ -2,7 +2,7 @@ import { _decorator, Button, Component, Label, macro, Node, Sprite, Toggle } fro
 import { gameConfig, panelState, volumeState } from '../../../Configs/Config';
 import { GameConstants } from '../../../Configs/GameConstants';
 import { sndType, SoundManager } from '../../../managers/SoundManager';
-import { creatEventHandler, formatNumber } from '../../../Utils/Utils';
+import { creatEventHandler, formatNumber, pickRandomNumbers } from '../../../Utils/Utils';
 import { EventManager, evtFunc, evtNode } from '../../EventManager';
 import { CommonManager } from './CommonManager';
 const { ccclass, property } = _decorator;
@@ -220,15 +220,15 @@ export class CommonBtns extends Component {
 
 
         //!----- for Test -----!//
-        /*
+        
         if (isChecked) {
             const ran = pickRandomNumbers();
-            emitUIManager(evtFunc.ballResults, [1, 2, 3, 4]);
+            emitUIManager(evtFunc.ballResults, [3, 12, 9, 6]);
         }
         else {
             emitUIManager(evtFunc.gameEnd);
         }
-        */
+        
         //!--------------------!//
     }
 
