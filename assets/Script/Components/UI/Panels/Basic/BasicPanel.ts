@@ -1,9 +1,9 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 import { BettingInfo, COLOR_COMBINATIONS, COLUMN_NUMBERS, Console, DOZEN_NUMBERS, gameConfig, moneyConfig, SPECIAL_HIGH_NUMBERS, SPECIAL_LOW_NUMBERS } from 'db://assets/Script/Configs/Config';
 import { GameConstants } from 'db://assets/Script/Configs/GameConstants';
+import { sndType, SoundManager } from 'db://assets/Script/managers/SoundManager';
 import { creatEventHandler, formatNumber, getColorCombination, parseNumber } from 'db://assets/Script/Utils/Utils';
 import { EventManager, evtFunc, evtNode } from '../../../EventManager';
-import { sndType, SoundManager } from 'db://assets/Script/managers/SoundManager';
 const { ccclass, property } = _decorator;
 
 class WinNode {
@@ -170,17 +170,15 @@ export class BasicPanel extends Component {
 
         // dozen
         for (let i = 0; i < 3; i++) {
-            if (numbers.every(num => DOZEN_NUMBERS[i].has(num))) {
+            if (numbers.filter(num => DOZEN_NUMBERS[i].has(num)).length >= 2) {
                 this.winNode.dozen[i].active = true;
-                break;
             }
         }
 
         // column
         for (let i = 0; i < 3; i++) {
-            if (numbers.every(num => COLUMN_NUMBERS[i].has(num))) {
+            if (numbers.filter(num => COLUMN_NUMBERS[i].has(num)).length >= 2) {
                 this.winNode.column[i].active = true;
-                break;
             }
         }
 
@@ -191,18 +189,20 @@ export class BasicPanel extends Component {
         }
 
         // special
-        if (numbers.every(num => SPECIAL_LOW_NUMBERS.has(num))) {
+        if (numbers.filter(num => SPECIAL_LOW_NUMBERS.has(num)).length >= 3) {
             this.winNode.special[0].active = true;
         }
-        else if (numbers.every(num => SPECIAL_HIGH_NUMBERS.has(num))) {
+        else if (numbers.filter(num => SPECIAL_HIGH_NUMBERS.has(num)).length >= 3) {
             this.winNode.special[3].active = true;
         }
+
         const sorted = Array.from(numbers).sort((a, b) => a - b);
         const isConsecutive1 = sorted[1] === sorted[0] + 1;
         const isConsecutive2 = sorted[2] === sorted[1] + 1;
         const isConsecutive3 = sorted[3] === sorted[2] + 1;
         if (isConsecutive1 && isConsecutive2 && isConsecutive3) {
             this.winNode.special[1].active = true;
+            this.winNode.special[2].active = true;
         }
         else if ((isConsecutive1 && isConsecutive2) || (isConsecutive2 && isConsecutive3)) {
             this.winNode.special[2].active = true;

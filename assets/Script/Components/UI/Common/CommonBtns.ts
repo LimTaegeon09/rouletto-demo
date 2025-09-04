@@ -223,7 +223,7 @@ export class CommonBtns extends Component {
         
         if (isChecked) {
             const ran = pickRandomNumbers();
-            emitUIManager(evtFunc.ballResults, [3, 12, 9, 6]);
+            emitUIManager(evtFunc.ballResults, [1,2,3,36]);
         }
         else {
             emitUIManager(evtFunc.gameEnd);

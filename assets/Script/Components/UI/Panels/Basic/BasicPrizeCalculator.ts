@@ -197,7 +197,6 @@ export class BasicPrizeCalculator extends Component {
 
                 default:
                     payKey = hits === 1 ? '1Hit' : `${hits}Hits`;
-
                     if (PayoutTable.Basic[bet.type][payKey]) {
                         totalWinnings += amount * PayoutTable.Basic[bet.type][payKey].pays + amount;
                     }
