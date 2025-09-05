@@ -1,5 +1,3 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/LimTaegeon09/rouletto-demo)
-
 # rouletto-demo
 
 =========================================
@@ -25,6 +23,11 @@
   - 설명: 웹소켓 서버 접속 주소
   - 타입: 문자열 (String)
   - 예시: "ws://roulettex.iptime.org:8080/ws"
+
+- AUDIO_WEBSOCKET_URL
+  - 설명: 실시간 오디오 스트리밍을 위한 웹소켓 서버 주소
+  - 타입: 문자열 (String)
+  - 예시: "ws://roulettex.iptime.org:5002/ws"
 
 - COUNTDOWN_TIME
   - 설명: 'PLACE YOUR BETS' 메시지가 표시되는 카운트다운 시간 (초 단위)

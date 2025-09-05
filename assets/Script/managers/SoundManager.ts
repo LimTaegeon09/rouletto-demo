@@ -1,4 +1,5 @@
 import { _decorator, AudioClip, AudioSource, Component, director, Node } from 'cc';
+import { AudioStreamManager } from '../Network/AudioStreamManager';
 const { ccclass, property } = _decorator;
 
 export enum sndType {
@@ -60,7 +61,7 @@ export class SoundManager extends Component {
 
         this.bgmSource = this.addComponent(AudioSource);
         this.bgmSource.volume = this.volume;
-        this.bgmSource.loop = true;        
+        this.bgmSource.loop = true;
         this.bgmSource.playOnAwake = true;
     }
 
@@ -109,6 +110,8 @@ export class SoundManager extends Component {
         }
 
         this.bgmSource.volume = this.volume;
+
+        AudioStreamManager.instance.setVolume(this.volume);
     }
 
 

@@ -6,6 +6,7 @@ import { GameConstants } from '../Configs/GameConstants';
 import { WebSocketClient } from '../Network/WebSocketClient';
 import { WebSocketMsg } from '../Network/WebSocketMsg';
 import { SoundManager } from './SoundManager';
+import { AudioStreamManager } from '../Network/AudioStreamManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameSceneManager')
@@ -33,10 +34,11 @@ export class GameSceneManager extends Component {
 
     protected start(): void {
         SoundManager.instance.playBGM();
+        AudioStreamManager.instance.initialize();
     }
 
     private audioEnable(event, customEventData) {
-        this.uiManager.commonBtn.setVolume(parseInt(customEventData));
+        this.uiManager.commonBtn.setVolume(parseInt(customEventData));        
 
         const interactionLayer = find('Canvas/UI').getChildByName('InteractionLayer');
         interactionLayer.active = false;

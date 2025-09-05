@@ -12,7 +12,8 @@ export let GameConstants = {
     INITIAL_USER_CREDIT: 0,
     CHIP_VALUES: [],
     PANEL_CYCLE_INTERVAL: 0,
-    HISTORY_BLINK_DURATION: 0
+    HISTORY_BLINK_DURATION: 0,
+    AUDIO_WEBSOCKET_URL: ''
 };
 
 export function initializeConstants(config: any) {

@@ -194,7 +194,7 @@ export class CommonManager extends Component {
     }
 
     private setJackpotWinLabel() {
-        this.jackpotWinLabel.string = gameConfig.currency.code + '\n' + formatCurrency(moneyConfig.jackpotWin, 1);
+        this.jackpotWinLabel.string = gameConfig.currency.code + '\n' + formatCurrency(moneyConfig.jackpotWin, 2);
     }
 
     private setCreditLabel() {

@@ -304,7 +304,7 @@ export class UIManager extends Component {
         this.basicPrizeCalculator.calculate(this.ballNums);
         this.fourSumPrizeCalculator.calculate();
 
-        //this.commonBtn.winStart();
+        this.commonBtn.winStart();
 
         if (moneyConfig.win > 0) {
             this.presentationManager.startTotalWin(moneyConfig.win);
